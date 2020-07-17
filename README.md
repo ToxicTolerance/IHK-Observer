@@ -1,15 +1,107 @@
-# IHK-Pruefungsergebnisse-Ausleser
+<a href="http://fvcproductions.com"><img src="https://avatars1.githubusercontent.com/u/4284691?v=3&s=200" title="FVCproductions" alt="FVCproductions"></a>
 
-Tool zum Auslesen der Prüfungsergebnisse von folgender Seite:  
-https://ausbildung.ihk.de/pruefungsinfos/Peo/Willkommen.aspx?knr=155  
+<!-- [![FVCproductions](https://avatars1.githubusercontent.com/u/4284691?v=3&s=200)](http://fvcproductions.com) -->
 
-Das Tool loggt sich ein und gibt die Ergebnisse aller veröffentlichten Prüfungen aus.  
+***INSERT GRAPHIC HERE (include hyperlink in image)***
 
-## Nutzung:  
-1. Das Programm benötigt die config.xml im selben Ordner.  
-Diese muss ausgefüllt sein mit den Daten des Schülers.  
+# IHK Observer
 
-2. Programm ausführen.  
+> A tiny Program for automated observing of the IHK Final Exams
 
-3. Captcha in die Konsole eingeben.  
-Hierbei sollte sich ein Bild des Captchas geöffnet haben.  
+
+**Badges will go here**
+
+- build status
+- issues (waffle.io maybe)
+- devDependencies
+- npm package
+- coverage
+- slack
+- downloads
+- gitter chat
+- license
+- etc.
+
+[![Build Status](http://img.shields.io/travis/badges/badgerbadgerbadger.svg?style=flat-square)](https://travis-ci.org/badges/badgerbadgerbadger) [![Dependency Status](http://img.shields.io/gemnasium/badges/badgerbadgerbadger.svg?style=flat-square)](https://gemnasium.com/badges/badgerbadgerbadger) [![Coverage Status](http://img.shields.io/coveralls/badges/badgerbadgerbadger.svg?style=flat-square)](https://coveralls.io/r/badges/badgerbadgerbadger) [![Code Climate](http://img.shields.io/codeclimate/github/badges/badgerbadgerbadger.svg?style=flat-square)](https://codeclimate.com/github/badges/badgerbadgerbadger) [![Github Issues](http://githubbadges.herokuapp.com/badges/badgerbadgerbadger/issues.svg?style=flat-square)](https://github.com/badges/badgerbadgerbadger/issues) [![Pending Pull-Requests](http://githubbadges.herokuapp.com/badges/badgerbadgerbadger/pulls.svg?style=flat-square)](https://github.com/badges/badgerbadgerbadger/pulls) [![Gem Version](http://img.shields.io/gem/v/badgerbadgerbadger.svg?style=flat-square)](https://rubygems.org/gems/badgerbadgerbadger) [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org) [![Badges](http://img.shields.io/:badges-9/9-ff6799.svg?style=flat-square)](https://github.com/badges/badgerbadgerbadger)
+
+- For more on these wonderful ~~badgers~~ badges, refer to <a href="http://badges.github.io/badgerbadgerbadger/" target="_blank">`badgerbadgerbadger`</a>.
+
+
+
+---
+
+## Example (Optional)
+
+```csharp
+// code away!
+// sample code for Using the Observer in your own project
+
+   private void Login()
+        {
+            //URL's
+            string welcome = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Willkommen.aspx?knr=155";
+            string login = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Login.aspx";
+            string results = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Ergebnisse.aspx";
+
+            // Create a config with your credentials
+            XmlConfig config = new XmlConfig("0000000", "00000");
+            config.SaveXmlConfig(Directory.GetCurrentDirectory() + "\\config.xml");
+
+            //Create new Instance of observer
+            Observer.IhkObserver observer = new Observer.IhkObserver(welcome, login, results, config);
+
+            //Adds a session Id for this session
+            observer.AddSessionId();
+
+            //Extracts loginInformations (URL to ViewState etc. -> ASPX) from the Website
+            observer.GetLoginInformations();
+
+            //Get the captcha as bitmap
+            Bitmap map = _observer.GetLoginCaptcha();
+
+            // Try to solve the captcha
+            //returns a manipulated (applied some filtering etc.) version of input Bitmap            
+            //and outputs the (hopefully correct) string via out-keyword
+            string text;
+            Bitmap mapFiltered = CaptchaSolver.CaptchaSolver.DeCaptcha(map, out text);
+            
+            // Attempt login
+            bool loggedIn = observer.Login(text);
+
+            //If successfully logged in, try to get the Exams Results
+            if (loggedIn == true)
+            {
+                List<SubjectMarks> marks = new List<SubjectMarks>();
+                observer.GetExamInformation(out marks);
+            }
+        }
+```
+
+---
+
+
+### Clone
+
+- Clone this repo to your local machine using `https://github.com/fvcproductions/SOMEREPO`
+
+
+
+
+## Special Thanks to...
+
+Reach out to me at one of the following places!
+
+- Website at <a href="http://fvcproductions.com" target="_blank">`fvcproductions.com`</a>
+- Twitter at <a href="http://twitter.com/fvcproductions" target="_blank">`@fvcproductions`</a>
+- Insert more social links here.
+
+---
+
+---
+
+## License
+
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+
+- **[MIT license](http://opensource.org/licenses/mit-license.php)**
+- Copyright 2015 © <a href="http://fvcproductions.com" target="_blank">FVCproductions</a>.
