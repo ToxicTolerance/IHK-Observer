@@ -71,14 +71,10 @@
 - Clone this repo to your local machine using `https://github.com/ToxicTolerance/IHK-Observer.git`
 
 
-
-
 ## Special Thanks to...
 
-Reach out to me at one of the following places!
-
-- Special thanks to @emre1702 for his initial work on webparsing the IHK-Website
-- Special thanks to @judero01col for his initial work on his captchaSolver which i adapted and improved for this.
+- * [@emre1702](https://github.com/emre1702/IHK-Pruefungsergebnisse-Ausleser) - for his initial work on webparsing the IHK-Website
+- * [@judero01col](https://github.com/judero01col/Captcha-Solver) - for his initial work on his captchaSolver which i adapted and improved for this.
 
 ---
 
