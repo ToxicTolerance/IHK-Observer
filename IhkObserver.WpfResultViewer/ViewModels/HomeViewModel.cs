@@ -83,7 +83,7 @@ namespace IhkObserver.WpfResultViewer.ViewModels
 
         public HomeViewModel(MainViewModel mainViewModel) : base(mainViewModel)
         {
-            XmlConfig config = new XmlConfig("00000", "000000");
+            XmlConfig config = new XmlConfig("2508139", "20735");
             config.SaveXmlConfig(Directory.GetCurrentDirectory() + "\\config.xml");
 
             _observer = new Observer.IhkObserver(_welcome, _login, _results, config);
@@ -95,7 +95,30 @@ namespace IhkObserver.WpfResultViewer.ViewModels
 
         }
 
+        private void TryLogin(int trys)
+        {
+            for (int i = 0; i < trys; i++)
+            {
+                Bitmap map = _observer.GetLoginCaptcha();
+                Captcha = BitmapConversion.BitmapToBitmapSource(map);
 
+                string text;
+                CaptchaFiltered = BitmapConversion.BitmapToBitmapSource(CaptchaSolver.CaptchaSolver.DeCaptcha(map, out text));
+
+                CaptchaText = text;
+                bool login = _observer.Login(text);
+
+
+                List<SubjectMarks> marks = new List<SubjectMarks>();
+                if (login == true)
+                {
+
+                    _observer.GetExamInformation(out marks);
+                    SubjectMarks = marks;
+                    break;
+                }
+            }
+        }
 
         private void ExecuteLoadResults()
         {
@@ -103,24 +126,7 @@ namespace IhkObserver.WpfResultViewer.ViewModels
 
             _observer.GetLoginInformations();
 
-            Bitmap map = _observer.GetLoginCaptcha();
-            Captcha = BitmapConversion.BitmapToBitmapSource(map);
-
-            string text;
-            CaptchaFiltered = BitmapConversion.BitmapToBitmapSource(CaptchaSolver.CaptchaSolver.DeCaptcha(map, out text));
-
-            CaptchaText = text;
-            bool login = _observer.Login(text);
-
-
-            List<SubjectMarks> marks = new List<SubjectMarks>();
-            if (login == true)
-            {
-
-                _observer.GetExamInformation(out marks);
-            }
-
-            SubjectMarks = marks;
+            TryLogin(5);
         }
 
 

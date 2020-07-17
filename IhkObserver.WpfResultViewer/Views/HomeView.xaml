@@ -11,8 +11,8 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="20"/>
@@ -23,27 +23,17 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30
-                           "/>
-
+            <RowDefinition Height="50"/>
             <RowDefinition Height="20"/>
 
         </Grid.RowDefinitions>
 
-        <Image Source="{Binding Captcha}"  
-   Name="image1" Stretch="Fill" HorizontalAlignment="Right"
-    Grid.Row="1" Grid.Column="3" Width="200" Height="50"  Grid.ColumnSpan="2" VerticalAlignment="Top" />
-        <Image Source="{Binding CaptchaFiltered}"  
-   Name="image2" Stretch="Fill" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-    Grid.Row="1" Grid.Column="3" Width="200" Height="50"  Grid.ColumnSpan="2"  />
-        <Label Content="{Binding CaptchaText}"  
-   Name="label"  HorizontalAlignment="Right" VerticalAlignment="Top"
-    Grid.Row="2" Grid.Column="3" Foreground="Black" Width="200" Height="50"  Grid.ColumnSpan="2"  />
 
-        <ItemsControl Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" Grid.RowSpan="2" ItemsSource="{Binding SubjectMarks}" Margin="20">
+
+        <ItemsControl Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="3" ItemsSource="{Binding SubjectMarks}" Margin="20">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Controls:Tile x:Name="VisitPlanTile" Width="500" Height="200" >
+                    <Controls:Tile x:Name="VisitPlanTile" Width="350" Height="200" >
                         <Controls:Tile.Style>
                             <Style TargetType="Controls:Tile">
                                 <Setter Property="IsEnabled" Value="True"></Setter>
@@ -62,12 +52,23 @@
                                 <RowDefinition Height="*"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
-                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="20"></RowDefinition>
                             </Grid.RowDefinitions>
 
-                            <Label Grid.Row="1"  Content ="{Binding Subject}" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"></Label>
-                            <Label Grid.Row="2"  Content="{Binding Mark}" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"></Label>
-                            <Label Grid.Row="3" Content="{Binding Points}" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"></Label>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="1" Grid.Column="1"  Content ="{Binding Subject}" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"></Label>
+                            <Label Grid.Row="2" Grid.Column="1" Content="{Binding Mark}" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"></Label>
+                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Points}" Foreground="White" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top"></Label>
                         </Grid>
                     </Controls:Tile>
                 </DataTemplate>
@@ -79,8 +80,13 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
-        <Button Grid.Column="4" Grid.Row="5" Command="{Binding Path=LoadResultsCommand}" Content="Load"/>
-        
+
+        <Image Source="{Binding Captcha}" Name="image1" Stretch="Fill" HorizontalAlignment="Left" Grid.Row="5" Grid.Column="1" Width="200" Height="50"  Grid.ColumnSpan="2" VerticalAlignment="Bottom" />
+        <Image Source="{Binding CaptchaFiltered}" Name="image2" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="5" Grid.Column="2" Width="200" Height="50"  Grid.ColumnSpan="2"  />
+        <!--<Label Content="{Binding CaptchaText}" Name="label"  HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" Grid.Column="3" Foreground="Black" Width="200" Height="50"  Grid.ColumnSpan="2"  />-->
+
+        <Button Height="30"  VerticalAlignment="Bottom" Grid.Column="4" Grid.Row="5" Command="{Binding Path=LoadResultsCommand}" Content="Load"/>
+
 
     </Grid>
 </UserControl>
