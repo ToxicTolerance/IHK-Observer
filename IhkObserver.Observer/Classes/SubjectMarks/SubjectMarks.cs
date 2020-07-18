@@ -12,14 +12,9 @@ namespace IhkObserver.Observer.Classes
 
         public int Points { get; set; }
 
-
         public SubjectMarks()
         {
 
         }
-
-
-
-
     }
 }
