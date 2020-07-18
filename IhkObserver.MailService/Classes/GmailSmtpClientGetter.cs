@@ -68,7 +68,7 @@ namespace IhkObserver.MailService.Classes
         {
             try
             {
-                await Smtp.AuthenticateAsync("throwawayhurensohn@gmail.com", "ixlfhgciwopukaho");
+                await Smtp.AuthenticateAsync("throwawayhurensohn@gmail.com", "password");
             }
             catch (Exception ex)
             {
