@@ -83,7 +83,6 @@
 
 
 
-        <Button Height="30"  VerticalAlignment="Bottom" Grid.Column="4" Grid.Row="5" Command="{Binding Path=LoadResultsCommand}" Content="Load Results"/>
 
 
     </Grid>
