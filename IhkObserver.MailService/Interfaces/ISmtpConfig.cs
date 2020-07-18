@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IhkObserver.MailService.Interfaces
+﻿namespace IhkObserver.MailService.Interfaces
 {
     public interface ISmtpConfig
     {
-        public string Host { get; set; }
-        public int Port { get; set; }
-        public string User { get; set; }
-        public string Password { get; set; }
+        public string Host { get; }
+        public int Port { get; }
+        public string User { get; }
+        public string Password { get; }
     }
 }

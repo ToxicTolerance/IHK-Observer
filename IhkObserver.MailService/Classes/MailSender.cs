@@ -13,6 +13,12 @@
 //    {
 //        public void SendResults(string recipientEmail, IEnumerable<SubjectMarks> results)
 //        {
+            
+
+
+
+
+
 //            // If we use interfaces, what about di(autofac)?
 //            ISmtpClientGetter smtpGetter = new GmailSmtpClientGetter();
 //            ISmtpClient smtp = smtpGetter.InitializeSmtpClient();
@@ -36,8 +42,6 @@
 //        {
 //            SmtpClient smtp = new SmtpClient();
 //        }
-
-
 
 //    }
 //}

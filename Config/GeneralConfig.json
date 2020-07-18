@@ -1,5 +1,7 @@
 {
-    "RepeatRunEach": 15,
+    "AzubiIdentnr": 1234567,
+    "Prüflingsnr": 12345,
+    "RepeatRunEach": 20,
     "TimeUnit": "Minutes",
     "NotifyOnStartup": true,
     "UseMailNotifications": true
