@@ -1,6 +1,6 @@
 ﻿namespace IhkObserver.Observer.Classes
 {
-    public struct Credentials
+    public class Credentials
     {
         #region[Properties]
 

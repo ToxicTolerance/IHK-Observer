@@ -1,31 +1,33 @@
-﻿using System.Configuration;
+﻿using IhkObserver.Observer.Classes;
+using System.Configuration;
 
 namespace IhkObserver.WpfResultViewer.ViewModels
 {
     class SettingsViewModel : MenuItemViewModel
     {
 
-        public string PrNr 
-        {
-            get => ConfigurationManager.AppSettings.Get("prNr");
-            set => ConfigurationManager.AppSettings.Set("prNr", value);
-        }
+        public string PrNr { get; set; }
 
-        public string IdNr 
-        { 
-            get => ConfigurationManager.AppSettings.Get("idNr");
-            set => ConfigurationManager.AppSettings.Set("idNr", value);
-        }
+        public string IdNr { get; set; }
 
         public RelayCommand SaveCommand { get; set; }
 
-        public SettingsViewModel(MainViewModel mainViewModel) : base(mainViewModel)
+        private readonly Credentials _cred;
+
+        public SettingsViewModel(MainViewModel mainViewModel, Credentials cred) : base(mainViewModel)
         {
+            _cred = cred;
+            PrNr = _cred.PrueflingsNr;
+            IdNr = _cred.IdentNr;
+
             SaveCommand = new RelayCommand(Save);
         }
 
         private void Save(object arg)
         {
+            _cred.PrueflingsNr = PrNr;
+            _cred.IdentNr = IdNr;
+
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             configuration.AppSettings.Settings["prNr"].Value = PrNr;
             configuration.AppSettings.Settings["idNr"].Value = IdNr;

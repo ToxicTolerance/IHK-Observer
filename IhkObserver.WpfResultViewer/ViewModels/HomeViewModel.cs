@@ -56,16 +56,9 @@ namespace IhkObserver.WpfResultViewer.ViewModels
         /// 
         /// </summary>
         /// <param name="mainViewModel"></param>
-        public HomeViewModel(MainViewModel mainViewModel) : base(mainViewModel)
+        public HomeViewModel(MainViewModel mainViewModel, Credentials cred) : base(mainViewModel)
         {
-            // 1 -Load from Config
-            string prNr = ConfigurationManager.AppSettings.Get("prNr");
-            string idNr = ConfigurationManager.AppSettings.Get("idNr");
-
-            // 2 - Create credentials
-            Credentials cred = new Credentials(idNr, prNr);
-
-            // 3 - Create observer instance
+            // Create observer instance
             _observer = new Observer.IhkObserver(_welcome, _login, _results, cred);
 
             //Directly load
