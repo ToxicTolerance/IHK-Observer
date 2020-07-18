@@ -1,0 +1,6 @@
+{
+    "RepeatRunEach": 15,
+    "TimeUnit": "Minutes",
+    "NotifyOnStartup": true,
+    "UseMailNotifications": true
+}

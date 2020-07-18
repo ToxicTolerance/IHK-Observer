@@ -1,0 +1,5 @@
+{
+    "SendTo": "mail@domain.com",
+    "Subject": "Du hast neue Abschlussnoten!",
+    "IncludeHtml": true 
+}
