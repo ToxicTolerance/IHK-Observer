@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace IhkObserver.WpfResultViewer.ViewModels
         private object _label;
         private object _toolTip;
         private bool _isVisible = true;
+
 
         public MenuItemViewModel(MainViewModel mainViewModel)
         {

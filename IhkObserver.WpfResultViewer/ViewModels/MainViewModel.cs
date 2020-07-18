@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.IconPacks;
+﻿using MahApps.Metro.Controls.Dialogs;
+using MahApps.Metro.IconPacks;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,9 +14,11 @@ namespace IhkObserver.WpfResultViewer.ViewModels
         private ObservableCollection<MenuItemViewModel> _menuItems;
         private ObservableCollection<MenuItemViewModel> _menuOptionItems;
 
+        // The DialogCoordinator
+
         public MainViewModel()
-        {
-            this.CreateMenuItems();
+        {            
+            this.CreateMenuItems();           
         }
 
         public void CreateMenuItems()

@@ -81,11 +81,9 @@
         </ItemsControl>
 
 
-        <Image Source="{Binding Captcha}" Name="image1" Stretch="Fill" HorizontalAlignment="Left" Grid.Row="5" Grid.Column="1" Width="200" Height="50"  Grid.ColumnSpan="2" VerticalAlignment="Bottom" />
-        <Image Source="{Binding CaptchaFiltered}" Name="image2" Stretch="Fill" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="5" Grid.Column="2" Width="200" Height="50"  Grid.ColumnSpan="2"  />
-        <!--<Label Content="{Binding CaptchaText}" Name="label"  HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" Grid.Column="3" Foreground="Black" Width="200" Height="50"  Grid.ColumnSpan="2"  />-->
 
-        <Button Height="30"  VerticalAlignment="Bottom" Grid.Column="4" Grid.Row="5" Command="{Binding Path=LoadResultsCommand}" Content="Load"/>
+
+        <Button Height="30"  VerticalAlignment="Bottom" Grid.Column="4" Grid.Row="5" Command="{Binding Path=LoadResultsCommand}" Content="Load Results"/>
 
 
     </Grid>

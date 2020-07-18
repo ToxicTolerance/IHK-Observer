@@ -1,9 +1,6 @@
 ﻿using AForge.Imaging.Filters;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Tesseract;
 
@@ -11,7 +8,7 @@ namespace IhkObserver.CaptchaSolver
 {
     public class CaptchaSolver
     {
-        public static string OCR(Bitmap b)
+        private static string OCR(Bitmap b)
         {
             try
             {
@@ -36,13 +33,11 @@ namespace IhkObserver.CaptchaSolver
 
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //MessageBox.Show($"Erro: {ex.Message}");
-                return null;
+                throw;
             }
         }
-
 
         public static Bitmap DeCaptcha(Image img, out string value)
         {
@@ -60,10 +55,41 @@ namespace IhkObserver.CaptchaSolver
             Closing close = new Closing();
             GaussianSharpen gs = new GaussianSharpen();
             ContrastCorrection cc = new ContrastCorrection();
-            FiltersSequence seq = new FiltersSequence(gs, inverter, open, inverter, bc, inverter, open, cc, cor, bc, inverter);
+            FiltersSequence seq = new FiltersSequence(gs, inverter, open, inverter, bc, inverter, open, cc, cor, bc, inverter, dilatation);
             Image image = seq.Apply(bmp);
             value = OCR((Bitmap)image);
             return (Bitmap)image;
+        }
+
+        public static Task<(Bitmap, string)> DeCaptchAsync(Image img)
+        {
+            return (Task<(Bitmap, string)>)Task.Run(() =>
+            {
+
+
+                string value;
+                Bitmap bmp = new Bitmap(img);
+                bmp = bmp.Clone(new Rectangle(0, 0, img.Width, img.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+                Erosion erosion = new Erosion();
+                Dilatation dilatation = new Dilatation();
+                Invert inverter = new Invert();
+                ColorFiltering cor = new ColorFiltering();
+                //cor.Blue = new AForge.IntRange(200, 255);
+                cor.Red = new AForge.IntRange(50, 255);
+                //cor.Green = new AForge.IntRange(200, 255);
+                Opening open = new Opening();
+                BlobsFiltering bc = new BlobsFiltering() { MinHeight = 10 };
+                Closing close = new Closing();
+                GaussianSharpen gs = new GaussianSharpen();
+                ContrastCorrection cc = new ContrastCorrection();
+                FiltersSequence seq = new FiltersSequence(gs, inverter, open, inverter, bc, inverter, open, cc, cor, bc, inverter, dilatation);
+                Image image = seq.Apply(bmp);
+                value = OCR((Bitmap)image);
+                return ((Bitmap)image, value);
+
+            });
+
+
         }
     }
 }
