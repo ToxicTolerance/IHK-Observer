@@ -6,30 +6,33 @@ using System.Threading.Tasks;
 
 namespace IhkObserver.MailService.Classes
 {
-    public class GmailSmtpClientGetter : ISmtpClientGetter, IAsyncDisposable
+    public class SmtpClientGetter : ISmtpClientGetter, IAsyncDisposable
     {
         #region methods
 
         #region ctor
 
-        public GmailSmtpClientGetter()
+        public SmtpClientGetter()
         {
             Smtp = new SmtpClient();
         }
 
-        public GmailSmtpClientGetter(ISmtpClient smtp)
+        public SmtpClientGetter(ISmtpClient smtp, ISmtpConfigReader configReader)
         {
             Smtp = smtp;
+            ConfigReader = configReader;
         }
 
         #endregion
 
         #region public methods
 
-        public async Task InitializeSmtpClient()
+        public async Task InitializeSmtpClientAsync()
         {
-            await Connect();
-            await Authenticate();
+            ISmtpConfig config = await ConfigReader.ReadAsync();
+
+            await ConnectAsync(config);
+            await AuthenticateAsync(config);
         }
 
         public async ValueTask DisposeAsync()
@@ -52,11 +55,11 @@ namespace IhkObserver.MailService.Classes
 
         #region private methods
 
-        private async Task Connect()
+        private async Task ConnectAsync(ISmtpConfig config)
         {
             try
             {
-                await Smtp.ConnectAsync(Host, Port);
+                await Smtp.ConnectAsync(config.Host, config.Port);
             }
             catch (Exception ex)
             {
@@ -64,11 +67,11 @@ namespace IhkObserver.MailService.Classes
             }
         }
 
-        private async Task Authenticate()
+        private async Task AuthenticateAsync(ISmtpConfig config)
         {
             try
             {
-                await Smtp.AuthenticateAsync("throwawayhurensohn@gmail.com", "password");
+                await Smtp.AuthenticateAsync(config.User, config.Password);
             }
             catch (Exception ex)
             {
@@ -83,8 +86,7 @@ namespace IhkObserver.MailService.Classes
         #region properties
 
         public ISmtpClient Smtp { get; private set; }
-        private string Host => "smtp.gmail.com";
-        private int Port => 465;
+        private ISmtpConfigReader ConfigReader { get; set; }
 
         #endregion
     }

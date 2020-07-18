@@ -1,7 +1,9 @@
-﻿namespace IhkObserver.MailService.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace IhkObserver.MailService.Interfaces
 {
     public interface ISmtpConfigReader
     {
-        public ISmtpConfig Read();
+        public Task<ISmtpConfig> ReadAsync();
     }
 }

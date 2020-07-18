@@ -1,32 +1,61 @@
 ﻿using IhkObserver.MailService.Classes;
 using IhkObserver.MailService.Exceptions;
+using IhkObserver.MailService.Interfaces;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using MimeKit;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace IhkObserver.MailService.Tests.UnitTests
 {
-    public class GmailSmtpClientGetterTests
+    public class SmtpClientGetterTests
     {
         [Fact]
-        public async Task InitializeSmtpClient_ConnectFailed()
+        public async Task InitializeSmtpClientAsync_ConfigUnreadableException()
         {
-            Exception originalEx = new Exception();
-
+            ConfigUnreadableException originalEx = new ConfigUnreadableException();
             MockStorage storage = new MockStorage();
+            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).ThrowsAsync(originalEx);
+
+            ConfigUnreadableException ex = await Assert.ThrowsAsync<ConfigUnreadableException>(async () =>
+                await storage.Create().InitializeSmtpClientAsync());
+
+            Assert.Same(originalEx, ex);
+        }
+
+        [Fact]
+        public async Task InitializeSmtpClientAsync_ConfigUnparsableException()
+        {
+            ConfigUnparsableException originalEx = new ConfigUnparsableException();
+            MockStorage storage = new MockStorage();
+            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).ThrowsAsync(originalEx);
+
+            ConfigUnparsableException ex = await Assert.ThrowsAsync<ConfigUnparsableException>(async () =>
+                await storage.Create().InitializeSmtpClientAsync());
+
+            Assert.Same(originalEx, ex);
+        }
+
+        [Fact]
+        public async Task InitializeSmtpClientAsync_ConnectFailed()
+        {
+            MockStorage storage = new MockStorage();
+
+            Task<ISmtpConfig> getConfigTask = new Task<ISmtpConfig>(() => storage.ConfigMock.Object);
+            getConfigTask.Start();
+            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).Returns(getConfigTask);
+
+            Exception originalEx = new Exception();
             storage.SmtpClientMock.Setup(a =>
                 a.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SecureSocketOptions>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(originalEx);
 
             SmtpNotConnectedException ex =
                 await Assert.ThrowsAsync<SmtpNotConnectedException>(async () =>
-                    await storage.Create().InitializeSmtpClient());
+                    await storage.Create().InitializeSmtpClientAsync());
             Assert.Same(originalEx, ex.InnerException);
 
             storage.SmtpClientMock.Verify(a =>
@@ -35,18 +64,22 @@ namespace IhkObserver.MailService.Tests.UnitTests
         }
 
         [Fact]
-        public async Task InitializeSmtpClient_AuthenticateFailed()
+        public async Task InitializeSmtpClientAsync_AuthenticateFailed()
         {
-            Exception originalEx = new Exception();
-
             MockStorage storage = new MockStorage();
+
+            Task<ISmtpConfig> getConfigTask = new Task<ISmtpConfig>(() => storage.ConfigMock.Object);
+            getConfigTask.Start();
+            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).Returns(getConfigTask);
+
+            Exception originalEx = new Exception();
             storage.SmtpClientMock.Setup(a =>
                 a.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(originalEx);
 
             SmtpNotAuthenticatedException ex =
                 await Assert.ThrowsAsync<SmtpNotAuthenticatedException>(async () =>
-                    await storage.Create().InitializeSmtpClient());
+                    await storage.Create().InitializeSmtpClientAsync());
             Assert.Same(originalEx, ex.InnerException);
 
             storage.SmtpClientMock.Verify(a =>
@@ -57,11 +90,15 @@ namespace IhkObserver.MailService.Tests.UnitTests
         }
 
         [Fact]
-        public async Task InitializeSmtpClient_Successful()
+        public async Task InitializeSmtpClientAsync_Successful()
         {
             MockStorage storage = new MockStorage();
-            GmailSmtpClientGetter getter = storage.Create();
-            await getter.InitializeSmtpClient();
+            Task<ISmtpConfig> getConfigTask = new Task<ISmtpConfig>(() => storage.ConfigMock.Object);
+            getConfigTask.Start();
+            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).Returns(getConfigTask);
+
+            SmtpClientGetter getter = storage.Create();
+            await getter.InitializeSmtpClientAsync();
 
             Assert.Same(getter.Smtp, storage.SmtpClientMock.Object);
 
@@ -78,7 +115,7 @@ namespace IhkObserver.MailService.Tests.UnitTests
             MockStorage storage = new MockStorage();
             storage.SmtpClientMock.Setup(a => a.IsConnected).Returns(false);
 
-            GmailSmtpClientGetter smtpGetter = storage.Create();
+            SmtpClientGetter smtpGetter = storage.Create();
             Assert.NotNull(smtpGetter.Smtp);
 
             await smtpGetter.DisposeAsync();
@@ -97,7 +134,7 @@ namespace IhkObserver.MailService.Tests.UnitTests
             storage.SmtpClientMock.Setup(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new ObjectDisposedException(nameof(storage.SmtpClientMock.Object)));
 
-            GmailSmtpClientGetter smtpGetter = storage.Create();
+            SmtpClientGetter smtpGetter = storage.Create();
             Assert.NotNull(smtpGetter.Smtp);
 
             await smtpGetter.DisposeAsync();
@@ -114,7 +151,7 @@ namespace IhkObserver.MailService.Tests.UnitTests
             MockStorage storage = new MockStorage();
             storage.SmtpClientMock.Setup(a => a.IsConnected).Returns(true);
 
-            GmailSmtpClientGetter smtpGetter = storage.Create();
+            SmtpClientGetter smtpGetter = storage.Create();
             Assert.NotNull(smtpGetter.Smtp);
 
             await smtpGetter.DisposeAsync();
@@ -130,14 +167,26 @@ namespace IhkObserver.MailService.Tests.UnitTests
             public MockStorage()
             {
                 SmtpClientMock = new Mock<ISmtpClient>();
+                ConfigReaderMock = new Mock<ISmtpConfigReader>();
+                ConfigMock = new Mock<ISmtpConfig>();
             }
 
-            public GmailSmtpClientGetter Create()
+            public SmtpClientGetter Create()
             {
-                return new GmailSmtpClientGetter(SmtpClientMock.Object);
+                return new SmtpClientGetter(SmtpClientMock.Object, ConfigReaderMock.Object);
+            }
+
+            public void SetupConfigMock()
+            {
+                ConfigMock.SetupGet(a => a.Host).Returns("smtp.host.com");
+                ConfigMock.SetupGet(a => a.Port).Returns(-1337);
+                ConfigMock.SetupGet(a => a.User).Returns("user@example.com");
+                ConfigMock.SetupGet(a => a.Password).Returns("My super secret mega password!");
             }
 
             public Mock<ISmtpClient> SmtpClientMock { get; set; }
+            public Mock<ISmtpConfigReader> ConfigReaderMock { get; set; }
+            public Mock<ISmtpConfig> ConfigMock { get; set; }
         }
     }
 }
