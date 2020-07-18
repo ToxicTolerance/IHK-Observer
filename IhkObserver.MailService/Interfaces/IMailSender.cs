@@ -1,10 +1,11 @@
 ﻿using IhkObserver.Observer.Classes;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace IhkObserver.MailService.Interfaces
 {
     public interface IMailSender
     {
-        public void SendResults(string recipientEmail, IEnumerable<SubjectMarks> results);
+        public Task SendResultsAsync(IEnumerable<SubjectMarks> results);
     }
 }

@@ -1,93 +1,93 @@
-﻿using IhkObserver.MailService.Exceptions;
-using IhkObserver.MailService.Interfaces;
-using MailKit.Net.Smtp;
-using System;
-using System.Threading.Tasks;
+﻿//using IhkObserver.MailService.Exceptions;
+//using IhkObserver.MailService.Interfaces;
+//using MailKit.Net.Smtp;
+//using System;
+//using System.Threading.Tasks;
 
-namespace IhkObserver.MailService.Classes
-{
-    public class SmtpClientGetter : ISmtpClientGetter, IAsyncDisposable
-    {
-        #region methods
+//namespace IhkObserver.MailService.Classes
+//{
+//    public class SmtpClientGetter : ISmtpClientGetter, IAsyncDisposable
+//    {
+//        #region methods
 
-        #region ctor
+//        #region ctor
 
-        public SmtpClientGetter()
-        {
-            Smtp = new SmtpClient();
-        }
+//        public SmtpClientGetter()
+//        {
+//            Smtp = new SmtpClient();
+//        }
 
-        public SmtpClientGetter(ISmtpClient smtp, ISmtpConfigReader configReader)
-        {
-            Smtp = smtp;
-            ConfigReader = configReader;
-        }
+//        public SmtpClientGetter(ISmtpClient smtp, ISmtpConfigReader configReader)
+//        {
+//            Smtp = smtp;
+//            ConfigReader = configReader;
+//        }
 
-        #endregion
+//        #endregion
 
-        #region public methods
+//        #region public methods
 
-        public async Task InitializeSmtpClientAsync()
-        {
-            ISmtpConfig config = await ConfigReader.ReadAsync();
+//        public async Task InitializeSmtpClientAsync()
+//        {
+//            ISmtpConfig config = await ConfigReader.ReadAsync();
 
-            await ConnectAsync(config);
-            await AuthenticateAsync(config);
-        }
+//            await ConnectAsync(config);
+//            await AuthenticateAsync(config);
+//        }
 
-        public async ValueTask DisposeAsync()
-        {
-            if (Smtp.IsConnected)
-            {
-                try
-                {
-                    await Smtp.DisconnectAsync(true);
-                }
-                catch (ObjectDisposedException)
-                {
+//        public async ValueTask DisposeAsync()
+//        {
+//            if (Smtp.IsConnected)
+//            {
+//                try
+//                {
+//                    await Smtp.DisconnectAsync(true);
+//                }
+//                catch (ObjectDisposedException)
+//                {
 
-                }
-            }
-            Smtp = null;
-        }
+//                }
+//            }
+//            Smtp = null;
+//        }
 
-        #endregion
+//        #endregion
 
-        #region private methods
+//        #region private methods
 
-        private async Task ConnectAsync(ISmtpConfig config)
-        {
-            try
-            {
-                await Smtp.ConnectAsync(config.Host, config.Port);
-            }
-            catch (Exception ex)
-            {
-                throw new SmtpNotConnectedException("Connection to smtp could not be made!", ex);
-            }
-        }
+//        private async Task ConnectAsync(ISmtpConfig config)
+//        {
+//            try
+//            {
+//                await Smtp.ConnectAsync(config.Host, config.Port);
+//            }
+//            catch (Exception ex)
+//            {
+//                throw new SmtpNotConnectedException("Connection to smtp could not be made!", ex);
+//            }
+//        }
 
-        private async Task AuthenticateAsync(ISmtpConfig config)
-        {
-            try
-            {
-                await Smtp.AuthenticateAsync(config.User, config.Password);
-            }
-            catch (Exception ex)
-            {
-                throw new SmtpNotAuthenticatedException("Could not authenticate at smtp server", ex);
-            }
-        }
+//        private async Task AuthenticateAsync(ISmtpConfig config)
+//        {
+//            try
+//            {
+//                await Smtp.AuthenticateAsync(config.User, config.SenderPassword);
+//            }
+//            catch (Exception ex)
+//            {
+//                throw new SmtpNotAuthenticatedException("Could not authenticate at smtp server", ex);
+//            }
+//        }
 
-        #endregion
+//        #endregion
 
-        #endregion
+//        #endregion
 
-        #region properties
+//        #region properties
 
-        public ISmtpClient Smtp { get; private set; }
-        private ISmtpConfigReader ConfigReader { get; set; }
+//        public ISmtpClient Smtp { get; private set; }
+//        private ISmtpConfigReader ConfigReader { get; set; }
 
-        #endregion
-    }
-}
+//        #endregion
+//    }
+//}

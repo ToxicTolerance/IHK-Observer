@@ -1,47 +1,38 @@
-﻿//using IhkObserver.MailService.Interfaces;
-//using IhkObserver.Observer.Classes;
-//using MailKit.Net.Smtp;
-//using System;
-//using System.Collections.Generic;
-//using System.Net;
-//using System.Net.Mail;
-//using System.Text;
+﻿using IhkObserver.MailService.Interfaces;
+using IhkObserver.Observer.Classes;
+using MailKit.Net.Smtp;
+using MimeKit;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace IhkObserver.MailService.Classes
-//{
-//    public class MailSender : IMailSender
-//    {
-//        public void SendResults(string recipientEmail, IEnumerable<SubjectMarks> results)
-//        {
-            
+namespace IhkObserver.MailService.Classes
+{
+    public class MailSender : IMailSender
+    {
+        public async Task SendResultsAsync(IEnumerable<SubjectMarks> results)
+        {
+            // TODO (MG): Rework this.
+            ISmtpClientGetter smtpGetter = null;
+            //ISmtpClientGetter smtpGetter = new SmtpClientGetter();
+            await smtpGetter.InitializeSmtpClientAsync();
+
+            smtpGetter.Smtp.Send(CreateMimeMessage(results));
+            throw new NotImplementedException();
+        }
+
+        private MimeMessage CreateMimeMessage(IEnumerable<SubjectMarks> results)
+        {
+            MimeMessage message = new MimeMessage();
 
 
+            throw new NotImplementedException();
+        }
 
-
-
-//            // If we use interfaces, what about di(autofac)?
-//            ISmtpClientGetter smtpGetter = new GmailSmtpClientGetter();
-//            ISmtpClient smtp = smtpGetter.InitializeSmtpClient();
-
-
-
-
-
-
-//            CreateSmtpClient().Send(CreateMailMessage());
-//            throw new NotImplementedException();
-//        }
-
-//        private MailMessage CreateMailMessage(string recipientEmail, IEnumerable<SubjectMarks> results)
-//        {
-//            MailMessage message = new MailMessage();
-//            message.
-//        }
-
-//        private SmtpClient CreateSmtpClient()
-//        {
-//            SmtpClient smtp = new SmtpClient();
-//        }
-
-//    }
-//}
+        private async Task<IMailConfig> GetMailConfig()
+        {
+            return await new MailConfigReader().ReadAsync();
+        }
+    }
+}

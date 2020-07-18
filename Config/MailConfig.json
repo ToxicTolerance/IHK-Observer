@@ -1,5 +1,12 @@
 {
-    "SendTo": "mail@domain.com",
-    "Subject": "Du hast neue Abschlussnoten!",
-    "IncludeHtml": true 
+    "SendTo": "recipient@domain.com",
+    "SendFrom": "sender@domain.com",
+    "Subject": "Du hast neue Abschlussnoten",
+    "IncludeHtml": true,
+    "SmtpSetting":
+    {
+        "Host": "smtp.domain.com",
+        "Port": 465,
+        "SenderPassword": "Password"
+    }
 }
