@@ -1,0 +1,6 @@
+{
+    "Host": "smtp.Host.com",
+    "Port": 465,
+    "User": "email",
+    "Password": "password"
+}
