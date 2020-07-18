@@ -1,6 +1,7 @@
 ﻿using IhkObserver.MailService.Exceptions;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IhkObserver.MailService.Classes
@@ -11,15 +12,28 @@ namespace IhkObserver.MailService.Classes
         {
             try
             {
-                using (FileStream fs = new FileStream(path, FileMode.Open))
-                using (StreamReader reader = new StreamReader(fs))
+                return await ReadBaseAsync(path);
+            }
+            catch (Exception)
+            {
+                try
                 {
-                    return await reader.ReadToEndAsync();
+                    Thread.Sleep(TimeSpan.FromSeconds(0.5));
+                    return await ReadBaseAsync(path);
+                }
+                catch (Exception ex)
+                {
+                    throw new ConfigUnreadableException("Config could not be read!", ex);
                 }
             }
-            catch (Exception ex)
+        }
+
+        private async Task<string> ReadBaseAsync(string path)
+        {
+            using (FileStream fs = new FileStream(path, FileMode.Open))
+            using (StreamReader reader = new StreamReader(fs))
             {
-                throw new ConfigUnreadableException("Config could not be read!", ex);
+                return await reader.ReadToEndAsync();
             }
         }
 

@@ -1,192 +1,159 @@
-﻿//using IhkObserver.MailService.Classes;
-//using IhkObserver.MailService.Exceptions;
-//using IhkObserver.MailService.Interfaces;
-//using MailKit.Net.Smtp;
-//using MailKit.Security;
-//using Moq;
-//using System;
-//using System.Threading;
-//using System.Threading.Tasks;
-//using Xunit;
+﻿using IhkObserver.MailService.Classes;
+using IhkObserver.MailService.Exceptions;
+using IhkObserver.MailService.Interfaces;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using Moq;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
-//namespace IhkObserver.MailService.Tests.UnitTests
-//{
-//    public class SmtpClientGetterTests
-//    {
-//        [Fact]
-//        public async Task InitializeSmtpClientAsync_ConfigUnreadableException()
-//        {
-//            ConfigUnreadableException originalEx = new ConfigUnreadableException();
-//            MockStorage storage = new MockStorage();
-//            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).ThrowsAsync(originalEx);
+namespace IhkObserver.MailService.Tests.UnitTests
+{
+    public class SmtpClientGetterTests
+    {
+        [Fact]
+        public async Task InitializeSmtpClientAsync_ConnectFailed()
+        {
+            MockStorage storage = new MockStorage();
 
-//            ConfigUnreadableException ex = await Assert.ThrowsAsync<ConfigUnreadableException>(async () =>
-//                await storage.Create().InitializeSmtpClientAsync());
+            Exception originalEx = new Exception();
+            storage.SmtpClientMock.Setup(a =>
+                a.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SecureSocketOptions>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(originalEx);
 
-//            Assert.Same(originalEx, ex);
-//        }
+            SmtpNotConnectedException ex =
+                await Assert.ThrowsAsync<SmtpNotConnectedException>(async () =>
+                    await storage.Create().InitializeSmtpClientAsync(storage.MailConfigMock.Object));
+            Assert.Same(originalEx, ex.InnerException);
 
-//        [Fact]
-//        public async Task InitializeSmtpClientAsync_ConfigUnparsableException()
-//        {
-//            ConfigUnparsableException originalEx = new ConfigUnparsableException();
-//            MockStorage storage = new MockStorage();
-//            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).ThrowsAsync(originalEx);
+            storage.SmtpClientMock.Verify(a =>
+                a.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SecureSocketOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+            storage.SmtpClientMock.VerifyNoOtherCalls();
+        }
 
-//            ConfigUnparsableException ex = await Assert.ThrowsAsync<ConfigUnparsableException>(async () =>
-//                await storage.Create().InitializeSmtpClientAsync());
+        [Fact]
+        public async Task InitializeSmtpClientAsync_AuthenticateFailed()
+        {
+            MockStorage storage = new MockStorage();
 
-//            Assert.Same(originalEx, ex);
-//        }
+            Exception originalEx = new Exception();
+            storage.SmtpClientMock.Setup(a =>
+                a.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(originalEx);
 
-//        [Fact]
-//        public async Task InitializeSmtpClientAsync_ConnectFailed()
-//        {
-//            MockStorage storage = new MockStorage();
+            SmtpNotAuthenticatedException ex =
+                await Assert.ThrowsAsync<SmtpNotAuthenticatedException>(async () =>
+                    await storage.Create().InitializeSmtpClientAsync(storage.MailConfigMock.Object));
+            Assert.Same(originalEx, ex.InnerException);
 
-//            Task<ISmtpConfig> getConfigTask = new Task<ISmtpConfig>(() => storage.ConfigMock.Object);
-//            getConfigTask.Start();
-//            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).Returns(getConfigTask);
+            storage.SmtpClientMock.Verify(a =>
+                a.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SecureSocketOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+            storage.SmtpClientMock.Verify(a =>
+                a.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+            storage.SmtpClientMock.VerifyNoOtherCalls();
+        }
 
-//            Exception originalEx = new Exception();
-//            storage.SmtpClientMock.Setup(a =>
-//                a.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SecureSocketOptions>(), It.IsAny<CancellationToken>()))
-//                .ThrowsAsync(originalEx);
+        [Fact]
+        public async Task InitializeSmtpClientAsync_Successful() 
+        {
+            MockStorage storage = new MockStorage();
 
-//            SmtpNotConnectedException ex =
-//                await Assert.ThrowsAsync<SmtpNotConnectedException>(async () =>
-//                    await storage.Create().InitializeSmtpClientAsync());
-//            Assert.Same(originalEx, ex.InnerException);
+            SmtpClientGetter getter = storage.Create();
+            await getter.InitializeSmtpClientAsync(storage.MailConfigMock.Object);
 
-//            storage.SmtpClientMock.Verify(a =>
-//                a.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SecureSocketOptions>(), It.IsAny<CancellationToken>()), Times.Once);
-//            storage.SmtpClientMock.VerifyNoOtherCalls();
-//        }
+            Assert.Same(getter.Smtp, storage.SmtpClientMock.Object);
 
-//        [Fact]
-//        public async Task InitializeSmtpClientAsync_AuthenticateFailed()
-//        {
-//            MockStorage storage = new MockStorage();
+            storage.SmtpClientMock.Verify(a =>
+                a.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SecureSocketOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+            storage.SmtpClientMock.Verify(a =>
+                a.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+            storage.SmtpClientMock.VerifyNoOtherCalls();
+        }
 
-//            Task<ISmtpConfig> getConfigTask = new Task<ISmtpConfig>(() => storage.ConfigMock.Object);
-//            getConfigTask.Start();
-//            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).Returns(getConfigTask);
+        [Fact]
+        public async Task DisposeAsync_NotConnected()
+        {
+            MockStorage storage = new MockStorage();
+            storage.SmtpClientMock.Setup(a => a.IsConnected).Returns(false);
 
-//            Exception originalEx = new Exception();
-//            storage.SmtpClientMock.Setup(a =>
-//                a.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-//                .ThrowsAsync(originalEx);
+            SmtpClientGetter smtpGetter = storage.Create();
+            Assert.NotNull(smtpGetter.Smtp);
 
-//            SmtpNotAuthenticatedException ex =
-//                await Assert.ThrowsAsync<SmtpNotAuthenticatedException>(async () =>
-//                    await storage.Create().InitializeSmtpClientAsync());
-//            Assert.Same(originalEx, ex.InnerException);
+            await smtpGetter.DisposeAsync();
+            Assert.Null(smtpGetter.Smtp);
 
-//            storage.SmtpClientMock.Verify(a =>
-//                a.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SecureSocketOptions>(), It.IsAny<CancellationToken>()), Times.Once);
-//            storage.SmtpClientMock.Verify(a =>
-//                a.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
-//            storage.SmtpClientMock.VerifyNoOtherCalls();
-//        }
+            storage.SmtpClientMock.VerifyGet(a => a.IsConnected, Times.Once);
+            storage.SmtpClientMock.VerifyNoOtherCalls();
+        }
 
-//        [Fact]
-//        public async Task InitializeSmtpClientAsync_Successful()
-//        {
-//            MockStorage storage = new MockStorage();
-//            Task<ISmtpConfig> getConfigTask = new Task<ISmtpConfig>(() => storage.ConfigMock.Object);
-//            getConfigTask.Start();
-//            storage.ConfigReaderMock.Setup(a => a.ReadAsync()).Returns(getConfigTask);
+        [Fact]
+        public async Task DisposeAsync_Connected_ConnectionDisposed()
+        {
+            MockStorage storage = new MockStorage();
+            storage.SmtpClientMock.Setup(a => a.IsConnected).Returns(true);
 
-//            SmtpClientGetter getter = storage.Create();
-//            await getter.InitializeSmtpClientAsync();
+            storage.SmtpClientMock.Setup(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new ObjectDisposedException(nameof(storage.SmtpClientMock.Object)));
 
-//            Assert.Same(getter.Smtp, storage.SmtpClientMock.Object);
+            SmtpClientGetter smtpGetter = storage.Create();
+            Assert.NotNull(smtpGetter.Smtp);
 
-//            storage.SmtpClientMock.Verify(a =>
-//                a.ConnectAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SecureSocketOptions>(), It.IsAny<CancellationToken>()), Times.Once);
-//            storage.SmtpClientMock.Verify(a =>
-//                a.AuthenticateAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
-//            storage.SmtpClientMock.VerifyNoOtherCalls();
-//        }
+            await smtpGetter.DisposeAsync();
+            Assert.Null(smtpGetter.Smtp);
 
-//        [Fact]
-//        public async Task DisposeAsync_NotConnected()
-//        {
-//            MockStorage storage = new MockStorage();
-//            storage.SmtpClientMock.Setup(a => a.IsConnected).Returns(false);
+            storage.SmtpClientMock.VerifyGet(a => a.IsConnected, Times.Once);
+            storage.SmtpClientMock.Verify(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()), Times.Once);
+            storage.SmtpClientMock.VerifyNoOtherCalls();
+        }
 
-//            SmtpClientGetter smtpGetter = storage.Create();
-//            Assert.NotNull(smtpGetter.Smtp);
+        [Fact]
+        public async Task DisposeAsync_Connected_Successful()
+        {
+            MockStorage storage = new MockStorage();
+            storage.SmtpClientMock.Setup(a => a.IsConnected).Returns(true);
 
-//            await smtpGetter.DisposeAsync();
-//            Assert.Null(smtpGetter.Smtp);
+            SmtpClientGetter smtpGetter = storage.Create();
+            Assert.NotNull(smtpGetter.Smtp);
 
-//            storage.SmtpClientMock.VerifyGet(a => a.IsConnected, Times.Once);
-//            storage.SmtpClientMock.VerifyNoOtherCalls();
-//        }
+            await smtpGetter.DisposeAsync();
+            Assert.Null(smtpGetter.Smtp);
 
-//        [Fact]
-//        public async Task DisposeAsync_Connected_ConnectionDisposed()
-//        {
-//            MockStorage storage = new MockStorage();
-//            storage.SmtpClientMock.Setup(a => a.IsConnected).Returns(true);
+            storage.SmtpClientMock.VerifyGet(a => a.IsConnected, Times.Once);
+            storage.SmtpClientMock.Verify(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()), Times.Once);
+            storage.SmtpClientMock.VerifyNoOtherCalls();
+        }
 
-//            storage.SmtpClientMock.Setup(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()))
-//                .ThrowsAsync(new ObjectDisposedException(nameof(storage.SmtpClientMock.Object)));
+        private class MockStorage
+        {
+            public MockStorage()
+            {
+                SmtpClientMock = new Mock<ISmtpClient>();
+                
+                MailConfigMock = new Mock<IMailConfig>();
+                SmtpConfigMock = new Mock<ISmtpConfig>();
+             
+                MailConfigMock.SetupGet(a => a.SmtpSetting).Returns(SmtpConfigMock.Object);
+            }
 
-//            SmtpClientGetter smtpGetter = storage.Create();
-//            Assert.NotNull(smtpGetter.Smtp);
+            public SmtpClientGetter Create()
+            {
+                return new SmtpClientGetter(SmtpClientMock.Object);
+            }
 
-//            await smtpGetter.DisposeAsync();
-//            Assert.Null(smtpGetter.Smtp);
+            public void SetupConfigMock()
+            {
+                MailConfigMock.SetupGet(a => a.SendFrom).Returns("user@example.com");
 
-//            storage.SmtpClientMock.VerifyGet(a => a.IsConnected, Times.Once);
-//            storage.SmtpClientMock.Verify(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()), Times.Once);
-//            storage.SmtpClientMock.VerifyNoOtherCalls();
-//        }
+                SmtpConfigMock.SetupGet(a => a.Host).Returns("smtp.host.com");
+                SmtpConfigMock.SetupGet(a => a.Port).Returns(-1337);
+                SmtpConfigMock.SetupGet(a => a.SenderPassword).Returns("My super secret mega password!");
+            }
 
-//        [Fact]
-//        public async Task DisposeAsync_Connected_Successful()
-//        {
-//            MockStorage storage = new MockStorage();
-//            storage.SmtpClientMock.Setup(a => a.IsConnected).Returns(true);
-
-//            SmtpClientGetter smtpGetter = storage.Create();
-//            Assert.NotNull(smtpGetter.Smtp);
-
-//            await smtpGetter.DisposeAsync();
-//            Assert.Null(smtpGetter.Smtp);
-
-//            storage.SmtpClientMock.VerifyGet(a => a.IsConnected, Times.Once);
-//            storage.SmtpClientMock.Verify(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()), Times.Once);
-//            storage.SmtpClientMock.VerifyNoOtherCalls();
-//        }
-
-//        private class MockStorage
-//        {
-//            public MockStorage()
-//            {
-//                SmtpClientMock = new Mock<ISmtpClient>();
-//                ConfigReaderMock = new Mock<ISmtpConfigReader>();
-//                ConfigMock = new Mock<ISmtpConfig>();
-//            }
-
-//            public SmtpClientGetter Create()
-//            {
-//                return new SmtpClientGetter(SmtpClientMock.Object, ConfigReaderMock.Object);
-//            }
-
-//            public void SetupConfigMock()
-//            {
-//                ConfigMock.SetupGet(a => a.Host).Returns("smtp.host.com");
-//                ConfigMock.SetupGet(a => a.Port).Returns(-1337);
-//                ConfigMock.SetupGet(a => a.User).Returns("user@example.com");
-//                ConfigMock.SetupGet(a => a.SenderPassword).Returns("My super secret mega password!");
-//            }
-
-//            public Mock<ISmtpClient> SmtpClientMock { get; set; }
-//            public Mock<ISmtpConfigReader> ConfigReaderMock { get; set; }
-//            public Mock<ISmtpConfig> ConfigMock { get; set; }
-//        }
-//    }
-//}
+            public Mock<ISmtpClient> SmtpClientMock { get; set; }
+            public Mock<IMailConfig> MailConfigMock { get; set; }
+            public Mock<ISmtpConfig> SmtpConfigMock { get; set; }
+        }
+    }
+}

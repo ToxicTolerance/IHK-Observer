@@ -1,8 +1,6 @@
 ﻿using IhkObserver.MailService.Interfaces;
 using IhkObserver.Observer.Classes;
-using MailKit.Net.Smtp;
 using MimeKit;
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,26 +11,28 @@ namespace IhkObserver.MailService.Classes
     {
         public async Task SendResultsAsync(IEnumerable<SubjectMarks> results)
         {
-            // TODO (MG): Rework this.
-            ISmtpClientGetter smtpGetter = null;
-            //ISmtpClientGetter smtpGetter = new SmtpClientGetter();
-            await smtpGetter.InitializeSmtpClientAsync();
+            IMailConfig config = await new MailConfigReader().ReadAsync();
 
-            smtpGetter.Smtp.Send(CreateMimeMessage(results));
-            throw new NotImplementedException();
+            ISmtpClientGetter smtpGetter = new SmtpClientGetter();
+            await smtpGetter.InitializeSmtpClientAsync(config);
+
+            smtpGetter.Smtp.Send(CreateMimeMessage(config, results));
         }
 
-        private MimeMessage CreateMimeMessage(IEnumerable<SubjectMarks> results)
+        private MimeMessage CreateMimeMessage(IMailConfig config, IEnumerable<SubjectMarks> results)
         {
-            MimeMessage message = new MimeMessage();
+            StringBuilder body = new StringBuilder("Dies sind deine Resultate: \n\n");
+            foreach (SubjectMarks subject in results)
+            {
+                body.Append($"{subject.Subject} mit {subject.Points} Punkten, Note {subject.Mark}. \n");
+            }
+            body.Append("Gratulation!");
 
-
-            throw new NotImplementedException();
-        }
-
-        private async Task<IMailConfig> GetMailConfig()
-        {
-            return await new MailConfigReader().ReadAsync();
+            return new MimeMessage(
+                new List<InternetAddress> { MailboxAddress.Parse(config.SendFrom) },
+                new List<InternetAddress> { MailboxAddress.Parse(config.SendTo) },
+                config.Subject,
+                new TextPart() { Text = body.ToString() });
         }
     }
 }
