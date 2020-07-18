@@ -1,33 +1,37 @@
 ﻿using IhkObserver.Observer.Classes;
-using IhkObserver.Observer;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
-using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace IhkObserver.WpfResultViewer.ViewModels
 {
     public class HomeViewModel : MenuItemViewModel
     {
+        #region [Fields]
 
-        List<SubjectMarks> _marks;
+        // Marks for each subject  received from IHK
+        private List<SubjectMarks> _marks;
 
-        private ImageSource _captcha;
-        private ImageSource _captchaFiltered;
-        private ICommand _loadResults;
-        private string _captchaText;
-
+        // Observer which handles the interactions with the 
+        // IHK Website        
         private Observer.IhkObserver _observer;
 
+        #endregion
+
+        #region[Constants]
+        //Constant URLS of the Website
         private const string _welcome = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Willkommen.aspx?knr=155";
         private const string _login = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Login.aspx";
         private const string _results = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Ergebnisse.aspx";
+        #endregion
 
-
+        #region[Properties]
+        /// <summary>
+        /// 
+        /// </summary>
         public List<SubjectMarks> SubjectMarks
         {
             get { return this._marks; }
@@ -37,110 +41,77 @@ namespace IhkObserver.WpfResultViewer.ViewModels
                 OnPropertyChanged();
             }
         }
-        public ImageSource CaptchaFiltered
+
+        /// <summary>
+        /// Executes directly the Loading
+        /// </summary>
+        private async void ExecuteLoadResults()
         {
-            get { return this._captchaFiltered; }
-            set
-            {
-                this._captchaFiltered = value;
-                OnPropertyChanged();
-            }
+            await TryLoginAsync();
         }
-        public ImageSource Captcha
-        {
-            get { return this._captcha; }
-            set
-            {
-                this._captcha = value;
-                OnPropertyChanged();
-            }
-        }
+        #endregion
 
-        public string CaptchaText
-        {
-            get { return this._captchaText; }
-            set
-            {
-                this._captchaText = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ICommand LoadResultsCommand
-        {
-            get
-            {
-                if (this._loadResults == null)
-                {
-                    this._loadResults = new RelayCommand(p => ExecuteLoadResults());
-                }
-                return this._loadResults;
-            }
-
-        }
-
-
-
+        #region[Constructor]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mainViewModel"></param>
         public HomeViewModel(MainViewModel mainViewModel) : base(mainViewModel)
         {
-            XmlConfig config = new XmlConfig("2508139", "20735");
-            config.SaveXmlConfig(Directory.GetCurrentDirectory() + "\\config.xml");
+            // 1 -Load from Config
+            string prNr = ConfigurationManager.AppSettings.Get("prNr");
+            string idNr = ConfigurationManager.AppSettings.Get("idNr");
 
-            _observer = new Observer.IhkObserver(_welcome, _login, _results, config);
+            // 2 - Create credentials
+            Credentials cred = new Credentials(idNr, prNr);
 
-            _observer.AddSessionId();
+            // 3 - Create observer instance
+            _observer = new Observer.IhkObserver(_welcome, _login, _results, cred);
 
-            _observer.GetLoginInformations();
-
-
+            //Directly load
+            ExecuteLoadResults();
         }
+        #endregion
 
-        private void TryLogin(int trys)
+        #region[Try Login]
+        /// <summary>
+        /// One simple async Task for logging in and receiveing the Exams informations
+        /// </summary>
+        /// <returns></returns>
+        private async Task TryLoginAsync()
         {
-            for (int i = 0; i < trys; i++)
+            bool loggedIn = false;
+            string valueOut;
+            Bitmap outBmp;
+
+            while (loggedIn == false)
             {
-                _observer.GetLoginInformations();
-                Bitmap map = _observer.GetLoginCaptcha();
-                Captcha = BitmapConversion.BitmapToBitmapSource(map);
+                // 1 - Get the Captcha
+                Bitmap bmp = await _observer.GetLoginCaptchaAsync().ConfigureAwait(false);
 
-                string text;
-                CaptchaFiltered = BitmapConversion.BitmapToBitmapSource(CaptchaSolver.CaptchaSolver.DeCaptcha(map, out text));
+                // 2 - Try to extract text. Getting the extracted text and the captcha
+                (outBmp, valueOut) = await CaptchaSolver.CaptchaSolver.DeCaptchAsync(bmp).ConfigureAwait(false);
 
-                CaptchaText = text;
-                bool login = _observer.Login(text);
+                // 3 - Await the login attempt
+                loggedIn = await _observer.LoginAsync(valueOut).ConfigureAwait(false);
 
-
-                List<SubjectMarks> marks = new List<SubjectMarks>();
-                if (login == true)
+                // 4 - If successfull, try to getting the Exams informations                
+                if (loggedIn == true)
                 {
+                    List<SubjectMarks> marks = new List<SubjectMarks>();
+                    marks = await _observer.GetExamInformationAsync().ConfigureAwait(false);
 
-                    _observer.GetExamInformation(out marks);
-                    SubjectMarks = marks;
-                    break;
+                    // Dispatch to UI 
+                    Application.Current.Dispatcher.Invoke(new Action(() => { SubjectMarks = marks; }));
                 }
+
+                //Not used because i dont show any infos about the captchas now
+                //Application.Current.Dispatcher.Invoke(new Action(() => { Captcha = BitmapConversion.BitmapToBitmapSource(bmp); }));
+                //Application.Current.Dispatcher.Invoke(new Action(() => { CaptchaFiltered = BitmapConversion.BitmapToBitmapSource(outBmp); }));
+                //Application.Current.Dispatcher.Invoke(new Action(() => { CaptchaText = valueOut; }));
+
             }
         }
-
-        private void ExecuteLoadResults()
-        {
-            _observer.AddSessionId();
-
-            TryLogin(5);
-        }
-
-
+        #endregion
     }
-
-    public static class BitmapConversion
-    {
-        public static BitmapSource BitmapToBitmapSource(Bitmap source)
-        {
-            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                          source.GetHbitmap(),
-                          IntPtr.Zero,
-                          Int32Rect.Empty,
-                          BitmapSizeOptions.FromEmptyOptions());
-        }
-    }
-
 }
