@@ -55,7 +55,11 @@ xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metr
             <DataTemplate DataType="{x:Type viewModels:AboutViewModel}">
                 <views:AboutView DataContext="{Binding}" />
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+                <views:SettingsView DataContext="{Binding}" />
+            </DataTemplate>
+
 
         </Grid.Resources>
 

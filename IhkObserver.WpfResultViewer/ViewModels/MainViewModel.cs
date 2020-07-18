@@ -32,6 +32,13 @@ namespace IhkObserver.WpfResultViewer.ViewModels
                     ToolTip = "Welcome Home"
                 },
 
+                 new SettingsViewModel(this)
+                {
+                    Icon = new PackIconMaterial() {Kind = PackIconMaterialKind.AccountSettings},
+                    Label = "Settings",
+                    ToolTip = "Configure your settings"
+                },
+
                 new AboutViewModel(this)
                 {
                     Icon = new PackIconMaterial() {Kind = PackIconMaterialKind.Help},
