@@ -14,7 +14,7 @@ namespace IhkObserver.MailService.Classes
             string fileContents = null;
             try
             {
-                using (FileStream fs = new FileStream("../../../../SmtpConfig.json", FileMode.Open))
+                using (FileStream fs = new FileStream("../../../../Config/SmtpConfig.json", FileMode.Open))
                 using (StreamReader reader = new StreamReader(fs))
                 {
                     fileContents = await reader.ReadToEndAsync();
