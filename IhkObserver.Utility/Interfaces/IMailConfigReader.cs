@@ -4,6 +4,6 @@ namespace IhkObserver.Utility.Interfaces
 {
     public interface IMailConfigReader
     {
-        public Task<IMailConfig> ReadAsync();
+        Task<IMailConfig> ReadAsync();
     }
 }

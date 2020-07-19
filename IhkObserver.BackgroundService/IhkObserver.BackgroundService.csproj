@@ -2,7 +2,17 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
+    <StartupObject>IhkObserver.BackgroundService.Startup</StartupObject>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IhkObserver.MailService\IhkObserver.MailService.csproj" />
+    <ProjectReference Include="..\IhkObserver.Utility\IhkObserver.Utility.csproj" />
+  </ItemGroup>
 
 </Project>

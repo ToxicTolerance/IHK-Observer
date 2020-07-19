@@ -25,7 +25,7 @@ namespace IhkObserver.Utility.Classes
             }
             catch (Exception ex)
             {
-                throw new ConfigUnparsableException("Config could not be parsed!", ex);
+                throw new ConfigUnparsableException("MailConfig.json could not be parsed!", ex);
             }
         }
 

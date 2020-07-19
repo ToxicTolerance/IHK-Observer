@@ -3,6 +3,7 @@ using IhkObserver.Observer.Classes;
 using IhkObserver.Utility.Classes;
 using IhkObserver.Utility.Interfaces;
 using MimeKit;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace IhkObserver.MailService.Classes
 {
     public class MailSender : IMailSender
     {
-        public async Task SendResultsAsync(IEnumerable<SubjectMarks> results)
+        public async Task SendResultsAsync(object sender, EventArgs e, IEnumerable<SubjectMarks> results)
         {
             IMailConfig config = await new MailConfigReader().ReadAsync();
 

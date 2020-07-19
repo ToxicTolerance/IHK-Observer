@@ -30,7 +30,7 @@ namespace IhkObserver.MailService.Tests.UnitTests
                 }
             };
 
-            await new MailSender().SendResultsAsync(list);
+            await new MailSender().SendResultsAsync(null, null, list);
         }
     }
 }

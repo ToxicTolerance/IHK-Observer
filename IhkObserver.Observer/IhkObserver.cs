@@ -78,10 +78,6 @@ namespace IhkObserver.Observer
             response.Close();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         private bool GetLoginInformations()
         {
             bool result = false;
