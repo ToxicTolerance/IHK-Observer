@@ -6,7 +6,7 @@ namespace IhkObserver.MailService.Interfaces
 {
     public interface ISmtpClientGetter
     {
-        public Task InitializeSmtpClientAsync(IMailConfig config);
+        public Task InitializeSmtpClientAsync(ISmtpConfig config);
         public ISmtpClient Smtp { get; }
     }
 }

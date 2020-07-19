@@ -26,7 +26,7 @@ namespace IhkObserver.MailService.Tests.UnitTests
 
             SmtpNotConnectedException ex =
                 await Assert.ThrowsAsync<SmtpNotConnectedException>(async () =>
-                    await storage.Create().InitializeSmtpClientAsync(storage.MailConfigMock.Object));
+                    await storage.Create().InitializeSmtpClientAsync(storage.SmtpConfigMock.Object));
             Assert.Same(originalEx, ex.InnerException);
 
             storage.SmtpClientMock.Verify(a =>
@@ -46,7 +46,7 @@ namespace IhkObserver.MailService.Tests.UnitTests
 
             SmtpNotAuthenticatedException ex =
                 await Assert.ThrowsAsync<SmtpNotAuthenticatedException>(async () =>
-                    await storage.Create().InitializeSmtpClientAsync(storage.MailConfigMock.Object));
+                    await storage.Create().InitializeSmtpClientAsync(storage.SmtpConfigMock.Object));
             Assert.Same(originalEx, ex.InnerException);
 
             storage.SmtpClientMock.Verify(a =>
@@ -57,12 +57,12 @@ namespace IhkObserver.MailService.Tests.UnitTests
         }
 
         [Fact]
-        public async Task InitializeSmtpClientAsync_Successful() 
+        public async Task InitializeSmtpClientAsync_Successful()
         {
             MockStorage storage = new MockStorage();
 
             SmtpClientGetter getter = storage.Create();
-            await getter.InitializeSmtpClientAsync(storage.MailConfigMock.Object);
+            await getter.InitializeSmtpClientAsync(storage.SmtpConfigMock.Object);
 
             Assert.Same(getter.Smtp, storage.SmtpClientMock.Object);
 
@@ -131,11 +131,7 @@ namespace IhkObserver.MailService.Tests.UnitTests
             public MockStorage()
             {
                 SmtpClientMock = new Mock<ISmtpClient>();
-                
-                MailConfigMock = new Mock<IMailConfig>();
                 SmtpConfigMock = new Mock<ISmtpConfig>();
-             
-                MailConfigMock.SetupGet(a => a.SmtpSetting).Returns(SmtpConfigMock.Object);
             }
 
             public SmtpClientGetter Create()
@@ -145,15 +141,13 @@ namespace IhkObserver.MailService.Tests.UnitTests
 
             public void SetupConfigMock()
             {
-                MailConfigMock.SetupGet(a => a.SendFrom).Returns("user@example.com");
-
                 SmtpConfigMock.SetupGet(a => a.Host).Returns("smtp.host.com");
                 SmtpConfigMock.SetupGet(a => a.Port).Returns(-1337);
+                SmtpConfigMock.SetupGet(a => a.Mail).Returns("user@example.com");
                 SmtpConfigMock.SetupGet(a => a.SenderPassword).Returns("My super secret mega password!");
             }
 
             public Mock<ISmtpClient> SmtpClientMock { get; set; }
-            public Mock<IMailConfig> MailConfigMock { get; set; }
             public Mock<ISmtpConfig> SmtpConfigMock { get; set; }
         }
     }

@@ -16,7 +16,7 @@ namespace IhkObserver.MailService.Classes
             IMailConfig config = await new MailConfigReader().ReadAsync();
 
             ISmtpClientGetter smtpGetter = new SmtpClientGetter();
-            await smtpGetter.InitializeSmtpClientAsync(config);
+            await smtpGetter.InitializeSmtpClientAsync(config.SmtpSetting);
 
             smtpGetter.Smtp.Send(CreateMimeMessage(config, results));
         }

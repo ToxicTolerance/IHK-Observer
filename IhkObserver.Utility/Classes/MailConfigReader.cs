@@ -16,7 +16,10 @@ namespace IhkObserver.Utility.Classes
             try
             {
                 MailConfig mailConfig = JsonSerializer.Deserialize<MailConfig>(json.mail);
-                mailConfig.SmtpSetting = JsonSerializer.Deserialize<SmtpConfig>(json.smtp);
+                SmtpConfig smtpConfig = JsonSerializer.Deserialize<SmtpConfig>(json.smtp);
+
+                smtpConfig.Mail = mailConfig.SendFrom;
+                mailConfig.SmtpSetting = smtpConfig;
 
                 return mailConfig;
             }
@@ -53,6 +56,7 @@ namespace IhkObserver.Utility.Classes
         {
             public string Host { get; set; }
             public int Port { get; set; }
+            public string Mail { get; set; }
             public string SenderPassword { get; set; }
         }
     }

@@ -27,9 +27,9 @@ namespace IhkObserver.MailService.Classes
 
         #region public methods
 
-        public async Task InitializeSmtpClientAsync(IMailConfig config)
+        public async Task InitializeSmtpClientAsync(ISmtpConfig config)
         {
-            await ConnectAsync(config.SmtpSetting);
+            await ConnectAsync(config);
             await AuthenticateAsync(config);
         }
 
@@ -65,11 +65,11 @@ namespace IhkObserver.MailService.Classes
             }
         }
 
-        private async Task AuthenticateAsync(IMailConfig config)
+        private async Task AuthenticateAsync(ISmtpConfig config)
         {
             try
             {
-                await Smtp.AuthenticateAsync(config.SendFrom, config.SmtpSetting.SenderPassword);
+                await Smtp.AuthenticateAsync(config.Mail, config.SenderPassword);
             }
             catch (Exception ex)
             {
