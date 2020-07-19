@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IhkObserver.Mail.Tests", "I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IhkObserver.Text.Tests", "IhkObserver.Text.Tests\IhkObserver.Text.Tests.csproj", "{9DA3CE74-A865-4714-BDAD-90D45C2D5009}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IhkObserver.Background.Tests", "IhkObserver.Background.Tests\IhkObserver.Background.Tests.csproj", "{D195F27E-14D1-4D80-AFE8-1332881B156C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +98,14 @@ Global
 		{9DA3CE74-A865-4714-BDAD-90D45C2D5009}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9DA3CE74-A865-4714-BDAD-90D45C2D5009}.Release|x64.ActiveCfg = Release|Any CPU
 		{9DA3CE74-A865-4714-BDAD-90D45C2D5009}.Release|x64.Build.0 = Release|Any CPU
+		{D195F27E-14D1-4D80-AFE8-1332881B156C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D195F27E-14D1-4D80-AFE8-1332881B156C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D195F27E-14D1-4D80-AFE8-1332881B156C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D195F27E-14D1-4D80-AFE8-1332881B156C}.Debug|x64.Build.0 = Debug|Any CPU
+		{D195F27E-14D1-4D80-AFE8-1332881B156C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D195F27E-14D1-4D80-AFE8-1332881B156C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D195F27E-14D1-4D80-AFE8-1332881B156C}.Release|x64.ActiveCfg = Release|Any CPU
+		{D195F27E-14D1-4D80-AFE8-1332881B156C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -49,6 +49,7 @@
     <Compile Include="Classes\GeneralConfigReader.cs" />
     <Compile Include="Classes\MailConfigReader.cs" />
     <Compile Include="Classes\PathGetter.cs" />
+    <Compile Include="Classes\ResultReadWriter.cs" />
     <Compile Include="Exceptions\ConfigException.cs" />
     <Compile Include="Exceptions\ConfigUnparsableException.cs" />
     <Compile Include="Exceptions\ConfigUnreadableException.cs" />
@@ -61,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IhkObserver.Observer\IhkObserver.Observer.csproj">
+      <Project>{0f2998f3-f73b-4f6e-837b-1fda0f067a57}</Project>
+      <Name>IhkObserver.Observer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

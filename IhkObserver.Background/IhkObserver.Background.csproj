@@ -33,6 +33,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +49,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IhkObserver.CaptchaSolver\IhkObserver.CaptchaSolver.csproj">
+      <Project>{c5dcb9a8-17c4-482d-bab3-4e9bff1ce78c}</Project>
+      <Name>IhkObserver.CaptchaSolver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IhkObserver.Mail\IhkObserver.Mail.csproj">
       <Project>{e47ee1d7-1110-42e6-bd3f-65b67ce414c1}</Project>
       <Name>IhkObserver.Mail</Name>
@@ -57,6 +65,9 @@
       <Project>{5442e64b-c363-40f8-86c4-fa7aa1d8bf78}</Project>
       <Name>IhkObserver.Text</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

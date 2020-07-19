@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9DA3CE74-A865-4714-BDAD-90D45C2D5009}</ProjectGuid>
+    <ProjectGuid>{D195F27E-14D1-4D80-AFE8-1332881B156C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IhkObserver.Text.Tests</RootNamespace>
-    <AssemblyName>IhkObserver.Text.Tests</AssemblyName>
+    <RootNamespace>IhkObserver.Background.Tests</RootNamespace>
+    <AssemblyName>IhkObserver.Background.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -50,21 +50,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTests\GeneralConfigReaderTests.cs" />
-    <Compile Include="UnitTests\MailConfigReaderTests.cs" />
-    <Compile Include="UnitTests\ResultReadWriterTests.cs" />
+    <Compile Include="StartupTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IhkObserver.Observer\IhkObserver.Observer.csproj">
-      <Project>{0f2998f3-f73b-4f6e-837b-1fda0f067a57}</Project>
-      <Name>IhkObserver.Observer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IhkObserver.Text\IhkObserver.Text.csproj">
-      <Project>{5442e64b-c363-40f8-86c4-fa7aa1d8bf78}</Project>
-      <Name>IhkObserver.Text</Name>
+    <ProjectReference Include="..\IhkObserver.Background\IhkObserver.Background.csproj">
+      <Project>{0dae637e-51a7-4be2-a381-c082d58b41a8}</Project>
+      <Name>IhkObserver.Background</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
