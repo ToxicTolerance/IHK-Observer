@@ -1,6 +1,9 @@
 ﻿using AForge.Imaging.Filters;
+using IhkObserver.Text.Classes;
 using System;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Tesseract;
 
@@ -13,7 +16,7 @@ namespace IhkObserver.CaptchaSolver
             try
             {
                 string res = string.Empty;
-                string path = $@"{Environment.CurrentDirectory}\tessdata\";
+                string path = $@"{PathGetter.GetBasePath()}\IhkObserver.WpfResultViewer\bin\Debug\tessdata";
 
                 using (var engine = new TesseractEngine(path, "eng"))
                 {
@@ -30,13 +33,32 @@ namespace IhkObserver.CaptchaSolver
                     using (var page = engine.Process(x, PageSegMode.SingleLine))
                         res = page.GetText().Replace(" ", "").Trim();
                 }
-
                 return res;
             }
             catch (Exception)
             {
                 throw;
             }
+        }
+
+        private static string GetTessdataPath()
+        {
+            DirectoryInfo info = new DirectoryInfo(Environment.CurrentDirectory);
+            while (true)
+            {
+                if (info.Name == "IHK-Observer")
+                {
+                    break;
+                }
+
+                if (info.Parent == null)
+                {
+                    throw new NotSupportedException("Could not find IHK-Observer Directory!");
+                }
+                info = info.Parent;
+            }
+            //return $@"{info.FullName}\IhkObserver.WpfResultViewer\bin\Debug\tessdata";
+            return $@"{info.FullName}\Debug\tessdata";
         }
 
         public static Bitmap DeCaptcha(Image img, out string value)
@@ -65,8 +87,6 @@ namespace IhkObserver.CaptchaSolver
         {
             return (Task<(Bitmap, string)>)Task.Run(() =>
             {
-
-
                 string value;
                 Bitmap bmp = new Bitmap(img);
                 bmp = bmp.Clone(new Rectangle(0, 0, img.Width, img.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -86,10 +106,7 @@ namespace IhkObserver.CaptchaSolver
                 Image image = seq.Apply(bmp);
                 value = OCR((Bitmap)image);
                 return ((Bitmap)image, value);
-
             });
-
-
         }
     }
 }

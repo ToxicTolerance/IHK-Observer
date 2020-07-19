@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -15,43 +16,23 @@ namespace IhkObserver.Observer
     public class IhkObserver
     {
         #region [Fields]
-        private Credentials _xmlConfig;
+
         private CookieContainer _container;
-
-        private string _urlLanding;
-        private string _urlLogin;
-        private string _urlResults;
-
         private LoginInformation _loginInfos;
+
         #endregion
 
-        #region[Properties]
-        public string UrlLandingPage
-        {
-            get { return _urlLanding; }
-            set { _urlLanding = value; }
-        }
+        #region [Properties]
 
-        public string UrlLoginPage
-        {
-            get { return _urlLogin; }
-            set { _urlLogin = value; }
-        }
+        public string UrlLandingPage { get; set; }
+        public string UrlLoginPage { get; set; }
+        public string UrlResultPage { get; set; }
+        public Credentials XmlConfig { get; set; }
 
-        public string UrlResultPage
-        {
-            get { return _urlResults; }
-            set { _urlResults = value; }
-        }
-
-        public Credentials XmlConfig
-        {
-            get { return _xmlConfig; }
-            set { _xmlConfig = value; }
-        }
         #endregion
 
-        #region[Constructor]
+        #region [Constructors]
+
         public IhkObserver()
         {
             _container = new CookieContainer();
@@ -60,13 +41,14 @@ namespace IhkObserver.Observer
 
         public IhkObserver(string urlLandingPage, string urlLoginPage, string urlResultPage, Credentials credentials)
         {
-            _urlLanding = urlLandingPage;
-            _urlLogin = urlLoginPage;
-            _urlResults = urlResultPage;
-            _xmlConfig = credentials;
+            UrlLandingPage = urlLandingPage;
+            UrlLoginPage = urlLoginPage;
+            UrlResultPage = urlResultPage;
+            XmlConfig = credentials;
 
             _container = new CookieContainer();
         }
+
         #endregion
 
         #region [Private Methods]
@@ -96,10 +78,6 @@ namespace IhkObserver.Observer
             response.Close();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         private bool GetLoginInformations()
         {
             bool result = false;
@@ -175,7 +153,7 @@ namespace IhkObserver.Observer
                     result = true;
                 }
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 result = false;
             }
@@ -222,7 +200,7 @@ namespace IhkObserver.Observer
         /// <returns></returns>
         private HttpWebRequest GenerateHttpWebRequestPOST()
         {
-            HttpWebRequest request = GenerateHttpWebRequest("POST", _urlLogin);
+            HttpWebRequest request = GenerateHttpWebRequest("POST", UrlLoginPage);
 
             request.ContentType = "application/x-www-form-urlencoded";
             request.Referer = "https://ausbildung.ihk.de/pruefungsinfos/peo/Login.aspx";
@@ -388,8 +366,8 @@ $"&__EVENTTARGET=ctl00$ContentPlaceHolder1$mlbSubmit" +
 $"&__EVENTARGUMENT=" +
 $"&__VIEWSTATE={HttpUtility.UrlEncode(_loginInfos.ViewState)}" +
 $"&__VIEWSTATEGENERATOR={HttpUtility.UrlEncode(_loginInfos.ViewStateGenerator)}" +
-$"&ctl00$ContentPlaceHolder1$txtAzubiNr={_xmlConfig.IdentNr}" +
-$"&ctl00$ContentPlaceHolder1$txtPrueflingsNr={_xmlConfig.PrueflingsNr}" +
+$"&ctl00$ContentPlaceHolder1$txtAzubiNr={XmlConfig.IdentNr}" +
+$"&ctl00$ContentPlaceHolder1$txtPrueflingsNr={XmlConfig.PrueflingsNr}" +
 $"&ctl00$ContentPlaceHolder1$mRadCaptcha$CaptchaTextBox={captcha}" +
 $"&ctl00_ContentPlaceHolder1_mRadCaptcha_ClientState=";
             var data = Encoding.ASCII.GetBytes(postData);
@@ -431,8 +409,8 @@ $"&__EVENTTARGET=ctl00$ContentPlaceHolder1$mlbSubmit" +
 $"&__EVENTARGUMENT=" +
 $"&__VIEWSTATE={HttpUtility.UrlEncode(_loginInfos.ViewState)}" +
 $"&__VIEWSTATEGENERATOR={HttpUtility.UrlEncode(_loginInfos.ViewStateGenerator)}" +
-$"&ctl00$ContentPlaceHolder1$txtAzubiNr={_xmlConfig.IdentNr}" +
-$"&ctl00$ContentPlaceHolder1$txtPrueflingsNr={_xmlConfig.PrueflingsNr}" +
+$"&ctl00$ContentPlaceHolder1$txtAzubiNr={XmlConfig.IdentNr}" +
+$"&ctl00$ContentPlaceHolder1$txtPrueflingsNr={XmlConfig.PrueflingsNr}" +
 $"&ctl00$ContentPlaceHolder1$mRadCaptcha$CaptchaTextBox={captcha}" +
 $"&ctl00_ContentPlaceHolder1_mRadCaptcha_ClientState=";
             var data = Encoding.ASCII.GetBytes(postData);

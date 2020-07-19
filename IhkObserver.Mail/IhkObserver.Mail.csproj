@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0F2998F3-F73B-4F6E-837B-1FDA0F067A57}</ProjectGuid>
+    <ProjectGuid>{E47EE1D7-1110-42E6-BD3F-65B67CE414C1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IhkObserver.Observer</RootNamespace>
-    <AssemblyName>IhkObserver.Observer</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <RootNamespace>IhkObserver.Mail</RootNamespace>
+    <AssemblyName>IhkObserver.Mail</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,13 +31,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.5\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="MailKit, Version=2.8.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailKit.2.8.0\lib\net47\MailKit.dll</HintPath>
+    </Reference>
+    <Reference Include="MimeKit, Version=2.9.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeKit.2.9.1\lib\net47\MimeKit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,14 +51,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\LoginInformation\LoginInformation.cs" />
-    <Compile Include="Classes\SubjectMarks\SubjectMarks.cs" />
-    <Compile Include="Classes\XmlConfig\XmlConfig.cs" />
-    <Compile Include="IhkObserver.cs" />
+    <Compile Include="Classes\MailSender.cs" />
+    <Compile Include="Classes\SmtpClientGetter.cs" />
+    <Compile Include="Exceptions\SmtpException.cs" />
+    <Compile Include="Exceptions\SmtpNotConnectedException.cs" />
+    <Compile Include="Exceptions\SmtpNotSecureException.cs" />
+    <Compile Include="Interfaces\IMailSender.cs" />
+    <Compile Include="Interfaces\ISmtpClientGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IhkObserver.Observer\IhkObserver.Observer.csproj">
+      <Project>{0f2998f3-f73b-4f6e-837b-1fda0f067a57}</Project>
+      <Name>IhkObserver.Observer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IhkObserver.Text\IhkObserver.Text.csproj">
+      <Project>{5442e64b-c363-40f8-86c4-fa7aa1d8bf78}</Project>
+      <Name>IhkObserver.Text</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
