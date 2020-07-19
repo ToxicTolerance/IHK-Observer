@@ -48,12 +48,7 @@ namespace IhkObserver.WpfResultViewer.ViewModels
                     ToolTip = "Configure your settings"
                 },
 
-                new AboutViewModel(this)
-                {
-                    Icon = new PackIconMaterial() {Kind = PackIconMaterialKind.Help},
-                    Label = "About",
-                    ToolTip = "About this one..."
-                }
+               
             };
         }
 
