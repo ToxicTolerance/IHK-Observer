@@ -1,8 +1,8 @@
-﻿using IhkObserver.MailService.Classes;
+﻿using IhkObserver.Utility.Classes;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace IhkObserver.MailService.Tests.UnitTests
+namespace IhkObserver.Utility.Tests.UnitTests
 {
     public class MailConfigReaderTests
     {

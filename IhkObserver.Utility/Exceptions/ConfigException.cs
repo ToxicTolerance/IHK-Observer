@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IhkObserver.MailService.Exceptions
+namespace IhkObserver.Utility.Exceptions
 {
     /// <summary>
     /// Abstract base class for all config related exceptions

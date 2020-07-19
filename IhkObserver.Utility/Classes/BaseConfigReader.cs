@@ -1,10 +1,10 @@
-﻿using IhkObserver.MailService.Exceptions;
+﻿using IhkObserver.Utility.Exceptions;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace IhkObserver.MailService.Classes
+namespace IhkObserver.Utility.Classes
 {
     public abstract class BaseConfigReader
     {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace IhkObserver.MailService.Interfaces
+namespace IhkObserver.Utility.Interfaces
 {
     public interface IMailConfigReader
     {

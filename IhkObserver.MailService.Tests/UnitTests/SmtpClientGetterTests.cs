@@ -1,6 +1,7 @@
 ﻿using IhkObserver.MailService.Classes;
 using IhkObserver.MailService.Exceptions;
 using IhkObserver.MailService.Interfaces;
+using IhkObserver.Utility.Interfaces;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Moq;

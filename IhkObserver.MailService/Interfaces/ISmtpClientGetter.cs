@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using IhkObserver.Utility.Interfaces;
+using MailKit.Net.Smtp;
 using System.Threading.Tasks;
 
 namespace IhkObserver.MailService.Interfaces

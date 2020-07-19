@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IhkObserver.Observer\IhkObserver.Observer.csproj" />
+    <ProjectReference Include="..\IhkObserver.Utility\IhkObserver.Utility.csproj" />
   </ItemGroup>
 
 </Project>

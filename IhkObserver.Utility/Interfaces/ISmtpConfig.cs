@@ -1,4 +1,4 @@
-﻿namespace IhkObserver.MailService.Interfaces
+﻿namespace IhkObserver.Utility.Interfaces
 {
     public interface ISmtpConfig
     {

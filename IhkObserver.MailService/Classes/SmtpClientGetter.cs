@@ -1,5 +1,6 @@
 ﻿using IhkObserver.MailService.Exceptions;
 using IhkObserver.MailService.Interfaces;
+using IhkObserver.Utility.Interfaces;
 using MailKit.Net.Smtp;
 using System;
 using System.Threading.Tasks;

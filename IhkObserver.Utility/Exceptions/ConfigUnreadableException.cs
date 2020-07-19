@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IhkObserver.MailService.Exceptions
+namespace IhkObserver.Utility.Exceptions
 {
     public class ConfigUnreadableException : ConfigException
     {

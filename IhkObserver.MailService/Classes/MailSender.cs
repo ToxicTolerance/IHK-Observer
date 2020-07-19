@@ -1,5 +1,7 @@
 ﻿using IhkObserver.MailService.Interfaces;
 using IhkObserver.Observer.Classes;
+using IhkObserver.Utility.Classes;
+using IhkObserver.Utility.Interfaces;
 using MimeKit;
 using System.Collections.Generic;
 using System.Text;
