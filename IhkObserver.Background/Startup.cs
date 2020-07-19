@@ -1,8 +1,7 @@
-﻿using IhkObserver.MailService.Classes;
-using IhkObserver.MailService.Interfaces;
+﻿using IhkObserver.Mail.Interfaces;
 using IhkObserver.Observer.Classes;
-using IhkObserver.Utility.Classes;
-using IhkObserver.Utility.Interfaces;
+using IhkObserver.Text.Classes;
+using IhkObserver.Text.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +9,7 @@ using System.Data;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using System.Threading.Tasks;
+using IhkObserver.Mail.Classes;
 
 namespace IhkObserver.BackgroundService
 {

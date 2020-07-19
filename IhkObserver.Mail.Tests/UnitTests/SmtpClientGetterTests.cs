@@ -95,8 +95,8 @@ namespace IhkObserver.Mail.Tests.UnitTests
             MockStorage storage = new MockStorage();
             storage.SmtpClientMock.Setup(a => a.IsConnected).Returns(true);
 
-            storage.SmtpClientMock.Setup(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new ObjectDisposedException(nameof(storage.SmtpClientMock.Object)));
+            storage.SmtpClientMock.Setup(a => a.Disconnect(true, It.IsAny<CancellationToken>()))
+                .Throws(new ObjectDisposedException(nameof(storage.SmtpClientMock.Object)));
 
             SmtpClientGetter smtpGetter = storage.Create();
             Assert.IsNotNull(smtpGetter.Smtp);
@@ -105,7 +105,7 @@ namespace IhkObserver.Mail.Tests.UnitTests
             Assert.IsNull(smtpGetter.Smtp);
 
             storage.SmtpClientMock.VerifyGet(a => a.IsConnected, Times.Once);
-            storage.SmtpClientMock.Verify(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()), Times.Once);
+            storage.SmtpClientMock.Verify(a => a.Disconnect(true, It.IsAny<CancellationToken>()), Times.Once);
             storage.SmtpClientMock.VerifyNoOtherCalls();
         }
 
@@ -122,7 +122,7 @@ namespace IhkObserver.Mail.Tests.UnitTests
             Assert.IsNull(smtpGetter.Smtp);
 
             storage.SmtpClientMock.VerifyGet(a => a.IsConnected, Times.Once);
-            storage.SmtpClientMock.Verify(a => a.DisconnectAsync(true, It.IsAny<CancellationToken>()), Times.Once);
+            storage.SmtpClientMock.Verify(a => a.Disconnect(true, It.IsAny<CancellationToken>()), Times.Once);
             storage.SmtpClientMock.VerifyNoOtherCalls();
         }
 

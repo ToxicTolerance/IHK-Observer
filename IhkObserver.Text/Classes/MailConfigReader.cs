@@ -10,12 +10,12 @@ namespace IhkObserver.Text.Classes
     {
         public async Task<IMailConfig> ReadAsync()
         {
-            (string mail, string smtp) json = GetSubstrings(await ReadAsync(ConfigPath + "MailConfig.json"));
+            string[] json = GetSubstrings(await ReadAsync(ConfigPath + "MailConfig.json"));
 
             try
             {
-                MailConfig mailConfig = JsonConvert.DeserializeObject<MailConfig>(json.mail);
-                SmtpConfig smtpConfig = JsonConvert.DeserializeObject<SmtpConfig>(json.smtp);
+                MailConfig mailConfig = JsonConvert.DeserializeObject<MailConfig>(json[0]);
+                SmtpConfig smtpConfig = JsonConvert.DeserializeObject<SmtpConfig>(json[1]);
 
                 smtpConfig.Mail = mailConfig.SendFrom;
                 mailConfig.SmtpSetting = smtpConfig;
@@ -28,7 +28,7 @@ namespace IhkObserver.Text.Classes
             }
         }
 
-        private (string mail, string smtp) GetSubstrings(string jsonContent)
+        private string[] GetSubstrings(string jsonContent)
         {
             int smtpStartIndex = jsonContent.IndexOf("\"SmtpSetting\"");
             int smtpEndIndex = jsonContent.IndexOf('}', smtpStartIndex);
@@ -39,7 +39,7 @@ namespace IhkObserver.Text.Classes
             SmtpSetting = SmtpSetting.Insert(1, "\"");
 
             string GeneralSetting = jsonContent.Substring(0, smtpStartIndex).Remove(jsonContent.LastIndexOf(',', smtpStartIndex)) + "}";
-            return (GeneralSetting, SmtpSetting);
+            return new string[] { GeneralSetting, SmtpSetting };
         }
 
         private class MailConfig : IMailConfig

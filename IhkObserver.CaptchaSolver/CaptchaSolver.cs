@@ -1,4 +1,5 @@
 ﻿using AForge.Imaging.Filters;
+using IhkObserver.Text.Classes;
 using System;
 using System.Drawing;
 using System.IO;
@@ -15,7 +16,7 @@ namespace IhkObserver.CaptchaSolver
             try
             {
                 string res = string.Empty;
-                string path = GetTessdataPath();
+                string path = $@"{PathGetter.GetBasePath()}\IhkObserver.WpfResultViewer\bin\Debug\tessdata";
 
                 using (var engine = new TesseractEngine(path, "eng"))
                 {

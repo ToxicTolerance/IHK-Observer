@@ -37,6 +37,6 @@ namespace IhkObserver.Text.Classes
             }
         }
 
-        protected string ConfigPath => "../../../../Config/";
+        protected string ConfigPath => $@"{PathGetter.GetBasePath()}\Config\";
     }
 }

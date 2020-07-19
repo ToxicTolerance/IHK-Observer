@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IhkObserver.Text</RootNamespace>
     <AssemblyName>IhkObserver.Text</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +48,7 @@
     <Compile Include="Classes\BaseConfigReader.cs" />
     <Compile Include="Classes\GeneralConfigReader.cs" />
     <Compile Include="Classes\MailConfigReader.cs" />
+    <Compile Include="Classes\PathGetter.cs" />
     <Compile Include="Exceptions\ConfigException.cs" />
     <Compile Include="Exceptions\ConfigUnparsableException.cs" />
     <Compile Include="Exceptions\ConfigUnreadableException.cs" />
