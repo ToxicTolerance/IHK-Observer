@@ -22,8 +22,13 @@
 // code away!
 // sample code for Using the Observer in your own project
 
-   private void Login()
+		private void Login()
         {
+			
+			bool loggedIn = false;
+            string valueOut;
+            Bitmap outBmp;
+
             //URL's
             string welcome = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Willkommen.aspx?knr=155";
             string login = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Login.aspx";
@@ -35,32 +40,26 @@
 
             //Create new Instance of observer
             Observer.IhkObserver observer = new Observer.IhkObserver(welcome, login, results, config);
+					
+            // 1 - Get the Captcha
+            Bitmap bmp = await _observer.GetLoginCaptchaAsync().ConfigureAwait(false);
 
-            //Adds a session Id for this session
-            observer.AddSessionId();
+            // 2 - Try to extract text. Getting the extracted text and the captcha
+            (outBmp, valueOut) = await CaptchaSolver.CaptchaSolver.DeCaptchAsync(bmp).ConfigureAwait(false);
 
-            //Extracts loginInformations (URL to ViewState etc. -> ASPX) from the Website
-            observer.GetLoginInformations();
+            // 3 - Await the login attempt
+            loggedIn = await _observer.LoginAsync(valueOut).ConfigureAwait(false);
 
-            //Get the captcha as bitmap
-            Bitmap map = _observer.GetLoginCaptcha();
-
-            // Try to solve the captcha
-            //returns a manipulated (applied some filtering etc.) version of input Bitmap            
-            //and outputs the (hopefully correct) string via out-keyword
-            string text;
-            Bitmap mapFiltered = CaptchaSolver.CaptchaSolver.DeCaptcha(map, out text);
-            
-            // Attempt login
-            bool loggedIn = observer.Login(text);
-
-            //If successfully logged in, try to get the Exams Results
+            // 4 - If successfull, try to getting the Exams informations                
             if (loggedIn == true)
             {
                 List<SubjectMarks> marks = new List<SubjectMarks>();
-                observer.GetExamInformation(out marks);
-            }
-        }
+                marks = await _observer.GetExamInformationAsync().ConfigureAwait(false);
+
+                // Dispatch to UI 
+                Application.Current.Dispatcher.Invoke(new Action(() => { SubjectMarks = marks; }));
+            } 
+		}
 ```
 
 ---

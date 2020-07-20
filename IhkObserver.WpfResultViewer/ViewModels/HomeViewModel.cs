@@ -1,7 +1,7 @@
 ﻿using IhkObserver.Observer.Classes;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,7 +18,7 @@ namespace IhkObserver.WpfResultViewer.ViewModels
         // Observer which handles the interactions with the 
         // IHK Website        
         private Observer.IhkObserver _observer;
-
+        private IDialogCoordinator dialogCoordinator;
         #endregion
 
         #region[Constants]
@@ -34,10 +34,10 @@ namespace IhkObserver.WpfResultViewer.ViewModels
         /// </summary>
         public List<SubjectMarks> SubjectMarks
         {
-            get { return this._marks; }
+            get { return _marks; }
             set
             {
-                this._marks = value;
+                _marks = value;
                 OnPropertyChanged();
             }
         }
@@ -58,13 +58,20 @@ namespace IhkObserver.WpfResultViewer.ViewModels
         /// <param name="mainViewModel"></param>
         public HomeViewModel(MainViewModel mainViewModel, Credentials cred) : base(mainViewModel)
         {
+
+
+
+
             // Create observer instance
             _observer = new Observer.IhkObserver(_welcome, _login, _results, cred);
 
             //Directly load
             ExecuteLoadResults();
+
         }
         #endregion
+
+
 
         #region[Try Login]
         /// <summary>
@@ -77,11 +84,11 @@ namespace IhkObserver.WpfResultViewer.ViewModels
             string valueOut;
             Bitmap outBmp;
 
+
             while (loggedIn == false)
             {
                 // 1 - Get the Captcha
                 Bitmap bmp = await _observer.GetLoginCaptchaAsync().ConfigureAwait(false);
-
                 // 2 - Try to extract text. Getting the extracted text and the captcha
                 (outBmp, valueOut) = await CaptchaSolver.CaptchaSolver.DeCaptchAsync(bmp).ConfigureAwait(false);
 

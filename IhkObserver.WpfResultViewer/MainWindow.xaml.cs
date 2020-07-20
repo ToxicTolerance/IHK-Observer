@@ -27,6 +27,9 @@ namespace IhkObserver.WpfResultViewer
         {
             InitializeComponent();
 
+            this.DataContext = new MainViewModel(DialogCoordinator.Instance);
+
+
         }
     }
 }

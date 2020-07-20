@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IhkObserver.WpfResultViewer"
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
-                 xmlns:views="clr-namespace:IhkObserver.WpfResultViewer.Views" 
-                 xmlns:viewModels="clr-namespace:IhkObserver.WpfResultViewer.ViewModels"
-xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-                 Dialog:DialogParticipation.Register="{Binding}"
-                 mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Window.DataContext>
+        xmlns:views="clr-namespace:IhkObserver.WpfResultViewer.Views" 
+        xmlns:viewModels="clr-namespace:IhkObserver.WpfResultViewer.ViewModels"
+        xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+        Dialog:DialogParticipation.Register="{Binding}"
+        mc:Ignorable="d"
+        Title="IHK Results" Height="450" Width="800">
+    <!--<Window.DataContext>
         <viewModels:MainViewModel />
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Grid>
 

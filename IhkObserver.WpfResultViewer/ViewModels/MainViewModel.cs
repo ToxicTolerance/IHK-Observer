@@ -1,13 +1,8 @@
 ﻿using IhkObserver.Observer.Classes;
 using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.IconPacks;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IhkObserver.WpfResultViewer.ViewModels
 {
@@ -15,11 +10,14 @@ namespace IhkObserver.WpfResultViewer.ViewModels
     {
         private ObservableCollection<MenuItemViewModel> _menuItems;
         private ObservableCollection<MenuItemViewModel> _menuOptionItems;
-
+        private IDialogCoordinator dialogCoordinator;
         // The DialogCoordinator
 
-        public MainViewModel()
+        public MainViewModel(IDialogCoordinator instance)
         {
+            dialogCoordinator = instance;
+
+
             // Load from Config
             string prNr = ConfigurationManager.AppSettings.Get("prNr");
             string idNr = ConfigurationManager.AppSettings.Get("idNr");
@@ -27,14 +25,18 @@ namespace IhkObserver.WpfResultViewer.ViewModels
             // Create credentials
             Credentials cred = new Credentials(idNr, prNr);
 
-            this.CreateMenuItems(cred);           
+            CreateMenuItems(cred);
+
+
         }
+       
+
 
         public void CreateMenuItems(Credentials cred)
         {
             MenuItems = new ObservableCollection<MenuItemViewModel>
             {
-                new HomeViewModel(this, cred)
+                new HomeViewModel(this, cred )
                 {
                     Icon = new PackIconMaterial() {Kind = PackIconMaterialKind.Home},
                     Label = "Home",
@@ -48,8 +50,11 @@ namespace IhkObserver.WpfResultViewer.ViewModels
                     ToolTip = "Configure your settings"
                 },
 
-               
+
             };
+
+
+
         }
 
         public ObservableCollection<MenuItemViewModel> MenuItems
