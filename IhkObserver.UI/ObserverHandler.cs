@@ -8,6 +8,7 @@ namespace IhkObserver.UI
 {
     public static class ObserverHandler
     {
+        #region[Delegates & Events]
         public delegate void DelegateCaptchaReceived(CaptchaEventArgs args);
         public delegate void DelegateCaptchaSolvedReceived(CaptchaSolvedEventArgs args);
         public delegate void DelegateLoginStatusReceived(LoginStatusEventArgs args);
@@ -18,15 +19,20 @@ namespace IhkObserver.UI
         public static event DelegateLoginStatusReceived OnLoginStatusReceived;
         public static event DelegateCaptchaSolvedReceived OnCaptchaSolvedReceived;
         public static event DelegateExamsInformationsReceived OnExamsInformationReiceived;
+        #endregion
 
+        #region[Fields]
         private static Observer.IhkObserver _observer;
+        #endregion
 
+        #region[Constructor]
         static ObserverHandler()
         {
             _observer = new Observer.IhkObserver();
         }
+        #endregion
 
-
+        #region[Configuring]
         public static void ConfigureCredentials(Credentials credentials)
         {
             _observer.XmlConfig = credentials;
@@ -39,7 +45,9 @@ namespace IhkObserver.UI
             _observer.UrlLoginPage = urlLogin;
             _observer.UrlResultPage = urlResults;
         }
+        #endregion
 
+        #region [Login]
         public static async Task LoginAsync()
         {
             bool loggedIn = false;
@@ -78,5 +86,6 @@ namespace IhkObserver.UI
 
             }
         }
+        #endregion
     }
 }

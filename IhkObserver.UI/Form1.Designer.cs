@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.metroControlBox1 = new MetroSuite.MetroControlBox();
             this.statusStrip = new MetroSuite.MetroStatusStrip();
@@ -48,9 +49,11 @@
             this.metroPanelCategory1 = new MetroSuite.MetroPanelCategory();
             this.metroLabel4 = new MetroSuite.MetroLabel();
             this.metroLabel3 = new MetroSuite.MetroLabel();
-            this.tbPrNr = new MetroSuite.MetroTextbox();
-            this.tbIdNr = new MetroSuite.MetroTextbox();
-            this.metroButton1 = new MetroSuite.MetroButton();
+            this.tbExamNumber = new MetroSuite.MetroTextbox();
+            this.tbIdentNumber = new MetroSuite.MetroTextbox();
+            this.btnSaveConfig = new MetroSuite.MetroButton();
+            this.epIdentNumber = new System.Windows.Forms.ErrorProvider(this.components);
+            this.epExamNumber = new System.Windows.Forms.ErrorProvider(this.components);
             this.statusStrip.SuspendLayout();
             this.metroTabControl1.SuspendLayout();
             this.tpMarks.SuspendLayout();
@@ -60,6 +63,8 @@
             this.tpSettings.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.metroPanelCategory1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.epIdentNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epExamNumber)).BeginInit();
             this.SuspendLayout();
             // 
             // metroControlBox1
@@ -178,7 +183,6 @@
             this.panelCaptchaSolving.Size = new System.Drawing.Size(1042, 111);
             this.panelCaptchaSolving.Style = MetroSuite.Design.Style.Dark;
             this.panelCaptchaSolving.TabIndex = 2;
-            this.panelCaptchaSolving.Click += new System.EventHandler(this.panelCaptchaSolving_Click);
             // 
             // btnRelaod
             // 
@@ -199,7 +203,7 @@
             this.btnRelaod.Style = MetroSuite.Design.Style.Dark;
             this.btnRelaod.TabIndex = 6;
             this.btnRelaod.Text = "Manual Reload";
-            this.btnRelaod.Click += new System.EventHandler(this.btnRelaod_Click);
+            this.btnRelaod.Click += new System.EventHandler(this.btnReload_Click);
             // 
             // lblCaptchaText
             // 
@@ -277,7 +281,7 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.metroPanelCategory1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.metroButton1, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.btnSaveConfig, 0, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -297,8 +301,8 @@
             this.metroPanelCategory1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
             this.metroPanelCategory1.Controls.Add(this.metroLabel4);
             this.metroPanelCategory1.Controls.Add(this.metroLabel3);
-            this.metroPanelCategory1.Controls.Add(this.tbPrNr);
-            this.metroPanelCategory1.Controls.Add(this.tbIdNr);
+            this.metroPanelCategory1.Controls.Add(this.tbExamNumber);
+            this.metroPanelCategory1.Controls.Add(this.tbIdentNumber);
             this.metroPanelCategory1.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.metroPanelCategory1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.metroPanelCategory1.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -335,60 +339,72 @@
             this.metroLabel3.TabIndex = 2;
             this.metroLabel3.Text = "Identifikationsnummer:";
             // 
-            // tbPrNr
+            // tbExamNumber
             // 
-            this.tbPrNr.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.tbPrNr.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
-            this.tbPrNr.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.tbPrNr.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.tbPrNr.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.tbPrNr.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
-            this.tbPrNr.HideSelection = false;
-            this.tbPrNr.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.tbPrNr.Location = new System.Drawing.Point(173, 82);
-            this.tbPrNr.Name = "tbPrNr";
-            this.tbPrNr.PasswordChar = '\0';
-            this.tbPrNr.Size = new System.Drawing.Size(134, 23);
-            this.tbPrNr.Style = MetroSuite.Design.Style.Dark;
-            this.tbPrNr.TabIndex = 1;
+            this.tbExamNumber.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.tbExamNumber.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
+            this.tbExamNumber.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.tbExamNumber.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.tbExamNumber.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.tbExamNumber.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.tbExamNumber.HideSelection = false;
+            this.tbExamNumber.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.tbExamNumber.Location = new System.Drawing.Point(173, 82);
+            this.tbExamNumber.Name = "tbExamNumber";
+            this.tbExamNumber.PasswordChar = '\0';
+            this.tbExamNumber.Size = new System.Drawing.Size(134, 23);
+            this.tbExamNumber.Style = MetroSuite.Design.Style.Dark;
+            this.tbExamNumber.TabIndex = 1;
+            this.tbExamNumber.TextChanged += new System.EventHandler(this.TextBox_textChanged);
             // 
-            // tbIdNr
+            // tbIdentNumber
             // 
-            this.tbIdNr.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.tbIdNr.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
-            this.tbIdNr.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.tbIdNr.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.tbIdNr.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.tbIdNr.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
-            this.tbIdNr.HideSelection = false;
-            this.tbIdNr.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.tbIdNr.Location = new System.Drawing.Point(173, 45);
-            this.tbIdNr.Name = "tbIdNr";
-            this.tbIdNr.PasswordChar = '\0';
-            this.tbIdNr.Size = new System.Drawing.Size(134, 23);
-            this.tbIdNr.Style = MetroSuite.Design.Style.Dark;
-            this.tbIdNr.TabIndex = 0;
+            this.tbIdentNumber.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.tbIdentNumber.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
+            this.tbIdentNumber.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.tbIdentNumber.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.tbIdentNumber.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.tbIdentNumber.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.tbIdentNumber.HideSelection = false;
+            this.tbIdentNumber.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.tbIdentNumber.Location = new System.Drawing.Point(173, 45);
+            this.tbIdentNumber.Name = "tbIdentNumber";
+            this.tbIdentNumber.PasswordChar = '\0';
+            this.tbIdentNumber.Size = new System.Drawing.Size(134, 23);
+            this.tbIdentNumber.Style = MetroSuite.Design.Style.Dark;
+            this.tbIdentNumber.TabIndex = 0;
+            this.tbIdentNumber.TextChanged += new System.EventHandler(this.TextBox_textChanged);
             // 
-            // metroButton1
+            // btnSaveConfig
             // 
-            this.metroButton1.BackColor = System.Drawing.Color.Transparent;
-            this.metroButton1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.metroButton1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
-            this.metroButton1.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.metroButton1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.metroButton1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.metroButton1.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.metroButton1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
-            this.metroButton1.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(63)))));
-            this.metroButton1.Location = new System.Drawing.Point(957, 694);
-            this.metroButton1.Name = "metroButton1";
-            this.metroButton1.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.metroButton1.RoundingArc = 25;
-            this.metroButton1.Size = new System.Drawing.Size(82, 25);
-            this.metroButton1.Style = MetroSuite.Design.Style.Dark;
-            this.metroButton1.TabIndex = 1;
-            this.metroButton1.Text = "Save Settings";
-            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
+            this.btnSaveConfig.BackColor = System.Drawing.Color.Transparent;
+            this.btnSaveConfig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnSaveConfig.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
+            this.btnSaveConfig.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.btnSaveConfig.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.btnSaveConfig.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnSaveConfig.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnSaveConfig.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.btnSaveConfig.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(63)))), ((int)(((byte)(63)))), ((int)(((byte)(63)))));
+            this.btnSaveConfig.Location = new System.Drawing.Point(957, 694);
+            this.btnSaveConfig.Name = "btnSaveConfig";
+            this.btnSaveConfig.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnSaveConfig.RoundingArc = 25;
+            this.btnSaveConfig.Size = new System.Drawing.Size(82, 25);
+            this.btnSaveConfig.Style = MetroSuite.Design.Style.Dark;
+            this.btnSaveConfig.TabIndex = 1;
+            this.btnSaveConfig.Text = "Save Settings";
+            this.btnSaveConfig.Click += new System.EventHandler(this.btnSaveConfig_Click);
+            // 
+            // epIdentNumber
+            // 
+            this.epIdentNumber.ContainerControl = this;
+            this.epIdentNumber.Icon = ((System.Drawing.Icon)(resources.GetObject("epIdentNumber.Icon")));
+            // 
+            // epExamNumber
+            // 
+            this.epExamNumber.ContainerControl = this;
+            this.epExamNumber.Icon = ((System.Drawing.Icon)(resources.GetObject("epExamNumber.Icon")));
             // 
             // Form1
             // 
@@ -406,6 +422,7 @@
             this.Style = MetroSuite.Design.Style.Dark;
             this.Text = "Ihk Marks";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.metroTabControl1.ResumeLayout(false);
@@ -418,6 +435,8 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.metroPanelCategory1.ResumeLayout(false);
             this.metroPanelCategory1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.epIdentNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.epExamNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -443,9 +462,11 @@
         private MetroSuite.MetroPanelCategory metroPanelCategory1;
         private MetroSuite.MetroLabel metroLabel4;
         private MetroSuite.MetroLabel metroLabel3;
-        private MetroSuite.MetroTextbox tbPrNr;
-        private MetroSuite.MetroTextbox tbIdNr;
-        private MetroSuite.MetroButton metroButton1;
+        private MetroSuite.MetroTextbox tbExamNumber;
+        private MetroSuite.MetroTextbox tbIdentNumber;
+        private MetroSuite.MetroButton btnSaveConfig;
+        private System.Windows.Forms.ErrorProvider epIdentNumber;
+        private System.Windows.Forms.ErrorProvider epExamNumber;
     }
 }
 
