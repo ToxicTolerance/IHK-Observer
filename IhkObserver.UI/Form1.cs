@@ -30,7 +30,7 @@ namespace IhkObserver.UI
         #endregion
 
         #region[ObserverHandler Events]
-        private void ObserverHandler_OnExamsInformationReiceived(Classes.ExamsInformationEventArgs args)
+        private void ObserverHandler_OnExamsInformationReceived(Classes.ExamsInformationEventArgs args)
         {
             int count = args.Results.Count;
             UpdateStatusLabel($"{count} Results loaded");
@@ -47,7 +47,11 @@ namespace IhkObserver.UI
 
                 panels.Add(panel);
             }
-            flowLayoutPanel1.Invoke((MethodInvoker)(() => flowLayoutPanel1.Controls.AddRange(panels.ToArray())));
+            flowLayoutPanel1.Invoke((MethodInvoker)(() => 
+            {
+                flowLayoutPanel1.Controls.Clear();
+                flowLayoutPanel1.Controls.AddRange(panels.ToArray());
+            }));
 
         }
 
@@ -202,7 +206,7 @@ namespace IhkObserver.UI
                 ObserverHandler.OnCaptchaReceived += ObserverHandler_OnCaptchaReceived;
                 ObserverHandler.OnCaptchaSolvedReceived += ObserverHandler_OnCaptchaSolvedReceived;
                 ObserverHandler.OnLoginStatusReceived += ObserverHandler_OnLoginStatusReceived;
-                ObserverHandler.OnExamsInformationReiceived += ObserverHandler_OnExamsInformationReiceived;
+                ObserverHandler.OnExamsInformationReiceived += ObserverHandler_OnExamsInformationReceived;
 
                 UpdateStatusLabel("Trying to Login");
 
