@@ -59,9 +59,10 @@ namespace IhkObserver.UI
             {
                 // 1 - Get the Captcha
                 Bitmap bmp = await _observer.GetLoginCaptchaAsync().ConfigureAwait(false);
+                var bmpCopy = (Bitmap)bmp.Clone();
 
                 // Fire event
-                OnCaptchaReceived?.Invoke(new CaptchaEventArgs(bmp));
+                OnCaptchaReceived?.Invoke(new CaptchaEventArgs(bmpCopy));
 
 
                 // 2 - Try to extract text. Getting the extracted text and the captcha
