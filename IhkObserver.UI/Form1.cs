@@ -239,7 +239,7 @@ namespace IhkObserver.UI
                     epIdentNumber.SetError(tbIdentNumber, "");
                     if (length != 7)
                     {
-                        epIdentNumber.SetError(tbIdentNumber, "Your must Identnumber must be 7 Charakters long");
+                        epIdentNumber.SetError(tbIdentNumber, "Your Identnumber must be 7 characters long");
                         bStatus = false;
                     }
                     else
