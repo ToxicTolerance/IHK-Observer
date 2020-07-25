@@ -1,7 +1,13 @@
-﻿using IhkObserver.UI.Classes;
+﻿using IhkObserver.Observer.Classes;
+using IhkObserver.UI.Classes;
 using MetroSuite;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace IhkObserver.UI
@@ -13,6 +19,13 @@ namespace IhkObserver.UI
         private const string _welcome = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Willkommen.aspx?knr=155";
         private const string _login = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Login.aspx";
         private const string _results = "https://ausbildung.ihk.de/pruefungsinfos/Peo/Ergebnisse.aspx";
+        #endregion
+
+        #region[Fields]
+        private static Task _loginTask;
+        private static System.Timers.Timer _refreshTimer;
+        private static readonly AutoResetEvent _loginResetEvent = new AutoResetEvent(false);
+        private static List<SubjectMarks> _lastResults;
         #endregion
 
         #region[Constructor]
@@ -53,6 +66,29 @@ namespace IhkObserver.UI
                 flowLayoutPanel1.Controls.AddRange(panels.ToArray());
             }));
 
+            if (!(_lastResults is null))
+            {
+                if (_lastResults.Count != args.Results.Count)
+                {
+                    if (_lastResults.Count > args.Results.Count)
+                        MessageBox.Show($"Min. eines deiner Noten wurde entfernt.{Environment.NewLine}Überprüfe deine Prüfungsergebnisse!", "IHKObserver", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    else
+                        MessageBox.Show($"Du hast mindestens eine neue Note bekommen.{Environment.NewLine}Überprüfe deine Prüfungsergebnisse!", "IHKObserver", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                } 
+
+                foreach (var oldResult in _lastResults)
+                {
+                    var newResult = args.Results.FirstOrDefault(s => s.Subject == oldResult.Subject);
+                    if (newResult is null)
+                        continue;
+
+                    if (oldResult.Points != newResult.Points || oldResult.Mark != newResult.Mark)
+                        MessageBox.Show($"Deine Punkte/Note in {oldResult.Subject} wurde(n) verändert!{Environment.NewLine}Vorher: {oldResult.Points} ({oldResult.Mark}){Environment.NewLine}Nachher: {newResult.Points} ({newResult.Mark})", "IHKObserver", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                    
+            } 
+                
+            _lastResults = args.Results;
         }
 
         private void ObserverHandler_OnLoginStatusReceived(Classes.LoginStatusEventArgs args)
@@ -96,21 +132,32 @@ namespace IhkObserver.UI
 
         private void btnReload_Click(object sender, EventArgs e)
         {
-            ProceedLogin();
+            _loginResetEvent.Set();
         }
 
         private void btnSaveConfig_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Identifikationsnummer = tbIdentNumber.Text;
             Properties.Settings.Default.Prüfungsnummer = tbExamNumber.Text;
+            Properties.Settings.Default.RefreshAfterSeconds = int.TryParse(tbRefreshAfterSeconds.Text, out int result) ? result : 60;
 
             Properties.Settings.Default.Save();
+
+            _refreshTimer.Interval = Properties.Settings.Default.RefreshAfterSeconds * 1000;
         }
 
         private void TextBox_textChanged(object sender, EventArgs e)
         {
             bool buttonEnabled = ValidateIdentNumber() && ValidateExamNumber();
             btnSaveConfig.Enabled = buttonEnabled;
+        }
+
+        private void TbRefreshAfterSeconds_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
 
         private void metroTabControl1_Selected(object sender, TabControlEventArgs e)
@@ -126,7 +173,7 @@ namespace IhkObserver.UI
                     {
                         tbExamNumber.Text = Properties.Settings.Default.Prüfungsnummer;
                         tbIdentNumber.Text = Properties.Settings.Default.Identifikationsnummer;
-
+                        tbRefreshAfterSeconds.Text = Properties.Settings.Default.RefreshAfterSeconds.ToString();
                     }
                     break;
             }
@@ -144,12 +191,32 @@ namespace IhkObserver.UI
             statusLabel.Text = text;
         }
 
+        private void StartMarksLoading()
+        {
+            if (!(_loginTask is null))
+                return;
+
+            _loginTask = Task.Run(async () =>
+            {
+                do 
+                {
+                    await ProceedLogin();
+                }
+                while (_loginResetEvent.WaitOne());
+            });
+                    
+            _refreshTimer = new System.Timers.Timer();
+            _refreshTimer.Interval = Properties.Settings.Default.RefreshAfterSeconds * 1000;
+
+            _refreshTimer.Elapsed += (sender, e) => _loginResetEvent.Set();
+            _refreshTimer.Start();
+        }
+
         /// <summary>
         /// Clears all Exam Informations and reloads them from the Web
         /// </summary>
-        private async void ProceedLogin()
+        private async Task ProceedLogin()
         {
-            flowLayoutPanel1.Controls.Clear();
             await ObserverHandler.LoginAsync();
 
         }
@@ -206,11 +273,12 @@ namespace IhkObserver.UI
                 ObserverHandler.OnCaptchaReceived += ObserverHandler_OnCaptchaReceived;
                 ObserverHandler.OnCaptchaSolvedReceived += ObserverHandler_OnCaptchaSolvedReceived;
                 ObserverHandler.OnLoginStatusReceived += ObserverHandler_OnLoginStatusReceived;
-                ObserverHandler.OnExamsInformationReiceived += ObserverHandler_OnExamsInformationReceived;
+                ObserverHandler.OnExamsInformationReceived += ObserverHandler_OnExamsInformationReceived;
 
                 UpdateStatusLabel("Trying to Login");
 
-                ProceedLogin();
+                StartMarksLoading();
+
             }
         }
 

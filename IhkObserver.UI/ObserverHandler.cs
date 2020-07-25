@@ -18,7 +18,7 @@ namespace IhkObserver.UI
         public static event DelegateCaptchaReceived OnCaptchaReceived;
         public static event DelegateLoginStatusReceived OnLoginStatusReceived;
         public static event DelegateCaptchaSolvedReceived OnCaptchaSolvedReceived;
-        public static event DelegateExamsInformationsReceived OnExamsInformationReiceived;
+        public static event DelegateExamsInformationsReceived OnExamsInformationReceived;
         #endregion
 
         #region[Fields]
@@ -82,7 +82,7 @@ namespace IhkObserver.UI
                     List<SubjectMarks> marks = new List<SubjectMarks>();
                     marks = await _observer.GetExamInformationAsync().ConfigureAwait(false);
 
-                    OnExamsInformationReiceived?.Invoke(new ExamsInformationEventArgs(marks));
+                    OnExamsInformationReceived?.Invoke(new ExamsInformationEventArgs(marks));
                 }
 
             }

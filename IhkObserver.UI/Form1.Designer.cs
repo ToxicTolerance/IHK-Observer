@@ -47,10 +47,12 @@
             this.tpSettings = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.metroPanelCategory1 = new MetroSuite.MetroPanelCategory();
+            this.metroLabel5 = new MetroSuite.MetroLabel();
             this.metroLabel4 = new MetroSuite.MetroLabel();
             this.metroLabel3 = new MetroSuite.MetroLabel();
             this.tbExamNumber = new MetroSuite.MetroTextbox();
             this.tbIdentNumber = new MetroSuite.MetroTextbox();
+            this.tbRefreshAfterSeconds = new MetroSuite.MetroTextbox();
             this.btnSaveConfig = new MetroSuite.MetroButton();
             this.epIdentNumber = new System.Windows.Forms.ErrorProvider(this.components);
             this.epExamNumber = new System.Windows.Forms.ErrorProvider(this.components);
@@ -299,10 +301,12 @@
             this.metroPanelCategory1.BackColor = System.Drawing.Color.Transparent;
             this.metroPanelCategory1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.metroPanelCategory1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
+            this.metroPanelCategory1.Controls.Add(this.metroLabel5);
             this.metroPanelCategory1.Controls.Add(this.metroLabel4);
             this.metroPanelCategory1.Controls.Add(this.metroLabel3);
             this.metroPanelCategory1.Controls.Add(this.tbExamNumber);
             this.metroPanelCategory1.Controls.Add(this.tbIdentNumber);
+            this.metroPanelCategory1.Controls.Add(this.tbRefreshAfterSeconds);
             this.metroPanelCategory1.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.metroPanelCategory1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.metroPanelCategory1.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -317,12 +321,23 @@
             this.metroPanelCategory1.Style = MetroSuite.Design.Style.Dark;
             this.metroPanelCategory1.TabIndex = 0;
             // 
+            // metroLabel5
+            // 
+            this.metroLabel5.AutoSize = true;
+            this.metroLabel5.BackColor = System.Drawing.Color.Transparent;
+            this.metroLabel5.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.metroLabel5.Location = new System.Drawing.Point(15, 119);
+            this.metroLabel5.Name = "metroLabel5";
+            this.metroLabel5.Size = new System.Drawing.Size(104, 15);
+            this.metroLabel5.TabIndex = 3;
+            this.metroLabel5.Text = "Aktualisiere alle x Sekunden:";
+            // 
             // metroLabel4
             // 
             this.metroLabel4.AutoSize = true;
             this.metroLabel4.BackColor = System.Drawing.Color.Transparent;
             this.metroLabel4.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.metroLabel4.Location = new System.Drawing.Point(15, 90);
+            this.metroLabel4.Location = new System.Drawing.Point(15, 82);
             this.metroLabel4.Name = "metroLabel4";
             this.metroLabel4.Size = new System.Drawing.Size(104, 15);
             this.metroLabel4.TabIndex = 3;
@@ -374,6 +389,25 @@
             this.tbIdentNumber.Style = MetroSuite.Design.Style.Dark;
             this.tbIdentNumber.TabIndex = 0;
             this.tbIdentNumber.TextChanged += new System.EventHandler(this.TextBox_textChanged);
+            // 
+            // tbRefreshAfterSeconds
+            // 
+            this.tbRefreshAfterSeconds.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.tbRefreshAfterSeconds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(98)))), ((int)(((byte)(98)))), ((int)(((byte)(98)))));
+            this.tbRefreshAfterSeconds.DefaultColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.tbRefreshAfterSeconds.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.tbRefreshAfterSeconds.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.tbRefreshAfterSeconds.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.tbRefreshAfterSeconds.HideSelection = false;
+            this.tbRefreshAfterSeconds.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.tbRefreshAfterSeconds.KeyPress += this.TbRefreshAfterSeconds_KeyPress;
+            this.tbRefreshAfterSeconds.Location = new System.Drawing.Point(173, 119);
+            this.tbRefreshAfterSeconds.Name = "tbRefreshAfterSeconds";
+            this.tbRefreshAfterSeconds.PasswordChar = '\0';
+            this.tbRefreshAfterSeconds.Size = new System.Drawing.Size(134, 23);
+            this.tbRefreshAfterSeconds.Style = MetroSuite.Design.Style.Dark;
+            this.tbRefreshAfterSeconds.TabIndex = 0;
+            this.tbRefreshAfterSeconds.TextChanged += new System.EventHandler(this.TextBox_textChanged);
             // 
             // btnSaveConfig
             // 
@@ -460,10 +494,12 @@
         private System.Windows.Forms.PictureBox pbCaptcha;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private MetroSuite.MetroPanelCategory metroPanelCategory1;
+        private MetroSuite.MetroLabel metroLabel5;
         private MetroSuite.MetroLabel metroLabel4;
         private MetroSuite.MetroLabel metroLabel3;
         private MetroSuite.MetroTextbox tbExamNumber;
         private MetroSuite.MetroTextbox tbIdentNumber;
+        private MetroSuite.MetroTextbox tbRefreshAfterSeconds;
         private MetroSuite.MetroButton btnSaveConfig;
         private System.Windows.Forms.ErrorProvider epIdentNumber;
         private System.Windows.Forms.ErrorProvider epExamNumber;
