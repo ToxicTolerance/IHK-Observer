@@ -195,7 +195,7 @@ namespace IhkObserver.UI
                 UpdateStatusLabel("Configuring Observer");
 
                 ObserverHandler.ConfigureUrls(_welcome, _login, _results);
-                ObserverHandler.ConfigureCredentials(new Observer.Classes.Credentials("2508139", "20735"));
+                ObserverHandler.ConfigureCredentials(new Observer.Classes.Credentials(Properties.Settings.Default.Identifikationsnummer, Properties.Settings.Default.Prüfungsnummer));
 
                 UpdateStatusLabel("Subscribe Observer");
 
